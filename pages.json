@@ -1,0 +1,85 @@
+{
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/tabbar/index/home",
+			"style": {
+				// "navigationBarTitleText": "uni-app"
+				"app-plus": {  
+				        "titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/tabbar/statics/home",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar/add/home",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar/plan/home",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar/mine/home",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar-3-detial/tabbar-3-release/tabbar-3-release",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar-3-detial/tabbar-3-video/tabbar-3-video",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
+			"style": {}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		// "navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"borderStyle": "black",
+		"backgroundColor": "#FFFFFF",
+		"color": "#bbbbbb",
+		"selectedColor": "#39b54a",
+		"list": [{
+				"pagePath": "pages/tabbar/index/home",
+				"iconPath": "static/img/tabbar/home.png",
+				"selectedIconPath": "static/img/tabbar/homeactive.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/statics/home",
+				"iconPath": "static/img/tabbar/statics.png",
+				"selectedIconPath": "static/img/tabbar/staticsactive.png",
+				"text": "统计"
+			},
+			{
+				"pagePath": "pages/tabbar/add/home",
+				"iconPath": "static/img/tabbar/add.png",
+				"selectedIconPath": "static/img/tabbar/addactive.png",
+				"text": "添加"
+			},
+			{
+				"pagePath": "pages/tabbar/plan/home",
+				"iconPath": "static/img/tabbar/plan.png",
+				"selectedIconPath": "static/img/tabbar/planactive.png",
+				"text": "计划"
+			},
+			{
+				"pagePath": "pages/tabbar/mine/home",
+				"iconPath": "static/img/tabbar/me.png",
+				"selectedIconPath": "static/img/tabbar/meactive.png",
+				"text": "我的"
+			}
+		]
+	}
+}
