@@ -3,7 +3,7 @@
 		<view class="header-container">
 			<view class="date-container">
 				<view class="date">
-					2020年10月
+					{{formatDateMonth(bill.date)}}
 				</view>
 			</view>
 			<view class="count-container">
@@ -12,7 +12,7 @@
 						支出(元)
 					</view>
 					<view class="value">
-						3009.09
+						{{bill.totalOut}}
 					</view>
 				</view>
 				<view class="in">
@@ -20,91 +20,40 @@
 						收入(元)
 					</view>
 					<view class="value">
-						45009.09
+						{{bill.totalIn}}
 					</view>
 				</view>
 			</view>
 		</view>
 	
 		<view class="middle-container">
-			<view class="card">
+			<view class="card" v-for="(item,index) in bill.billList" :key="index">
 				<view class="total">
-					<image class="icon" src="../../../static/img/qa.png"></image>
-					<view class="left-label">今天</view>
-					<view class="out-label">支</view>
-					<view class="out-value">45.09</view>
-					<view class="in-label">收</view>
-					<view class="in-value">600</view>
+					<view class="left">
+						<image class="icon" src="../../../static/img/qa.png"></image>
+						<view class="left-label">{{formatDate(item.date)}}</view>
+					</view>
+					<view class="right">
+						<view class="out-label">支</view>
+						<view class="out-value">{{item.dateTotalOut}}</view>
+						<view class="in-label">收</view>
+						<view class="in-value">{{item.dateTotalIn}}</view>
+					</view>
+					
 				</view>
 				<view class="detail">
-					<view class="item">
+					<view class="item" v-for="(billItem,index) in item.bills" :key="index">
 						<image src="../../../static/img/qa.png" class="icon"></image>
 						<view class="middle">
-							<view class="item-name">餐饮-奶茶</view>
+							<view class="item-name">{{billItem.label}}</view>
 							<view class="item-user-container">
-								<view class="user">爱记账的喵喵</view>
-								<view class="time">3小时前</view>
+								<view class="user">{{billItem.username}}</view>
+								<view class="time">{{formatTime(billItem.time)}}</view>
 							</view>
 						</view>
 						<view class="right">
-							<view class="money">-60</view>
-							<view class="account">微信钱包</view>
-						</view>
-					</view>
-					<view class="item">
-						<image src="../../../static/img/qa.png" class="icon"></image>
-						<view class="middle">
-							<view class="item-name">餐饮-奶茶</view>
-							<view class="item-user-container">
-								<view class="user">爱记账的喵喵</view>
-								<view class="time">3小时前</view>
-							</view>
-						</view>
-						<view class="right">
-							<view class="money">-60</view>
-							<view class="account">微信钱包</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="card">
-				<view class="total">
-					<image class="icon" src="../../../static/img/qa.png"></image>
-					<view class="left-label">昨天</view>
-					<view class="out-label">支</view>
-					<view class="out-value">45.09</view>
-					<view class="in-label">收</view>
-					<view class="in-value">600</view>
-				</view>
-				<view class="detail">
-					<view class="item">
-						<image src="../../../static/img/qa.png" class="icon"></image>
-						<view class="middle">
-							<view class="item-name">餐饮-奶茶</view>
-							<view class="item-user-container">
-								<view class="user">爱记账的喵喵</view>
-								<view class="time">3小时前</view>
-							</view>
-						</view>
-						<view class="right">
-							<view class="money">-60</view>
-							<view class="account">微信钱包</view>
-						</view>
-					</view>
-					<view class="line">
-					</view>
-					<view class="item">
-						<image src="../../../static/img/qa.png" class="icon"></image>
-						<view class="middle">
-							<view class="item-name">餐饮-奶茶</view>
-							<view class="item-user-container">
-								<view class="user">爱记账的喵喵</view>
-								<view class="time">3小时前</view>
-							</view>
-						</view>
-						<view class="right">
-							<view class="money">-60</view>
-							<view class="account">微信钱包</view>
+							<view class="money">{{billItem.amount}}</view>
+							<view class="account">{{billItem.account}}</view>
 						</view>
 					</view>
 				</view>
@@ -115,27 +64,54 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
 	data() {
 		return {
-			title: 'Hello'
+			bill:{}
 		};
 	},
 	onLoad() {
-		//调用云函数
+		//通过赋值解决success方法里面的this指向问题
+		let that = this
+		//获取首页账单详情
 		uniCloud.callFunction({
-		    name: 'getTotalOutAndIn',
-		    data: { a: 1 },
-		    success(){
-				console.log('哈哈哈')
+			name:'getBillDetail',
+			data:{
+				username:'DarLiu&DarQin',
+				date:'2020-10'
 			},
-		    fail(){
-				console.log('阿达')
+			success(res) {
+				that.bill = res.result.data[0]
+				console.log(that.bill,'数据')
 			},
-		    complete(){}
-		});
+			fail(res) {
+				console.log('fail')
+			}
+		})
 	},
-	methods: {}
+	methods: {
+		/**
+		 * 格式化显示时间
+		 * @param {Object} date
+		 */
+		formatTime(date){
+			return moment(date).format('HH:mm:ss')
+		},
+		/**
+		 * 格式化显示年月日
+		 * @param {Object} date
+		 */
+		formatDate(date){
+			return moment(date).format('MM月DD日')
+		},
+		/**格式化显示年月
+		 * @param {Object} date
+		 */
+		formatDateMonth(date){
+			return moment(date).format('YYYY年MM月')
+		}
+	}
 };
 </script>
 
@@ -155,7 +131,7 @@ export default {
 	width: 100%;
 	padding: 100upx 0 0 0;
 	/* background-image: url(../../../static/img/index/header_bg.jpg); */
-	background-color: #39b54a;
+	background-color: #03a174;
 	height: 320upx;
 	color: #FFFFFF;
 }
@@ -210,6 +186,19 @@ export default {
 	margin: 20upx 0 20upx 0;
 }
 
+.middle-container .card .total .left,.middle-container .card .total .right{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 50%;
+}
+
+.middle-container .card .total .right{
+	width: 46%;
+	justify-content: flex-end;
+	font-size: 30upx;
+}
+
 .middle-container .card .total .icon{
 	height: 35upx;
 	width: 35upx;
@@ -218,12 +207,8 @@ export default {
 }
 
 .middle-container .card .total .left-label{
-	margin: 0 0 0 10upx;
+	margin: 0 0 0 20upx;
 	font-weight: bold;
-}
-
-.middle-container .card .total .out-label{
-	margin: 0 0 0 38%;
 }
 
 .in-label{
@@ -238,9 +223,10 @@ export default {
 	display: flex;
 	flex-direction: column;
 	margin: 20upx 0 0 0;
-	width: 90%;
+	width: 91%;
 	padding: 0 0 0 20upx;
-	box-shadow: 0px 0px 5px #CCCCCC
+	box-shadow: 0px 0px 5px #CCCCCC;
+	border-radius: 10upx;
 }
 
 
@@ -248,6 +234,7 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: space-around;
 	padding: 10upx 0;
 }
 
@@ -265,7 +252,7 @@ export default {
 .detail .middle{
 	display: flex;
 	flex-direction: column;
-	width: 70%;
+	width: 60%;
 	margin: 0 0 0 40upx;
 	padding: 18upx 0;
 	/* border-bottom: #CCCCCC solid 1upx; */
@@ -280,19 +267,23 @@ export default {
 
 .detail .middle .item-user-container .time{
 	margin: 0 0 0 15upx;
+	font-size: 24upx;
 }
 
 .detail .right{
 	/* margin: 0 0 0 15%; */
-	padding: 36upx 0;
+	padding: 18upx 15upx 18upx 0;
+	width: 30%;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-end;
+	/* padding: 0 10upx 0 0; */
+	
 	/* border-bottom: #CCCCCC solid 1upx; */
 }
 
 .detail .right .account{
-	font-size: 22upx;
+	font-size: 26upx;
 }
 
 
