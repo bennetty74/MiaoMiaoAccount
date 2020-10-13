@@ -16,7 +16,14 @@
 		},
 		{
 			"path": "pages/tabbar/add/home",
-			"style": {}
+			"style": {
+				"app-plus": {  
+					"titleNView": {
+						"titleAlign":"center",
+						"titleText": "记账"
+					}  
+				}  
+			}
 		},
 		{
 			"path": "pages/tabbar/plan/home",

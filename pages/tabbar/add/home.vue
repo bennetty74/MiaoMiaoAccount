@@ -59,7 +59,7 @@
 			<view class="keybord-top">
 				<view class="note">
 					<image class="icon" src="../../../static/img/qa.png" mode=""></image>
-					<text>备注:</text>
+					<text class="text">备注:</text>
 				</view>
 				<input class="note-input" type="text" v-model="note" placeholder="填写备注..."/>
 				<view class="amount">
@@ -67,25 +67,25 @@
 				</view>
 			</view>
 			<view class="keybord-content">
-				<view class="item number">7</view>
-				<view class="item number">8</view>
-				<view class="item number">9</view>
-				<view class="item number">=</view>
+				<view class="item number" data-num="7"  @click="getValue($event)">7</view>
+				<view class="item number" data-num="8"  @click="getValue($event)">8</view>
+				<view class="item number" data-num="9"  @click="getValue($event)">9</view>
+				<view class="item number" @click="backspace()">Del</view>
 				
-				<view class="item number">4</view>
-				<view class="item number">5</view>
-				<view class="item number">6</view>
-				<view class="item number">+</view>
+				<view class="item number" data-num="4"  @click="getValue($event)">4</view>
+				<view class="item number" data-num="5"  @click="getValue($event)">5</view>
+				<view class="item number" data-num="6"  @click="getValue($event)">6</view>
+				<view class="item number" data-num="+"  @click="getValue($event)">+</view>
 				
-				<view class="item number">1</view>
-				<view class="item number">2</view>
-				<view class="item number">3</view>
-				<view class="item number">-</view>
+				<view class="item number" data-num="1"  @click="getValue($event)">1</view>
+				<view class="item number" data-num="2"  @click="getValue($event)">2</view>
+				<view class="item number" data-num="3"  @click="getValue($event)">3</view>
+				<view class="item number" data-num="-"  @click="getValue($event)">-</view>
 				
-				<view class="item number">.</view>
-				<view class="item number">0</view>
-				<view class="item number">x</view>
-				<view class="item complete">完成</view>
+				<view class="item number" data-num="."  @click="getValue($event)">.</view>
+				<view class="item number" data-num="0"  @click="getValue($event)">0</view>
+				<view class="item number" data-num="="  @click="getValue($event)">=</view>
+				<view class="item complete" @click="submit()">完成</view>
 			</view>
 		</view>
 		
@@ -99,13 +99,44 @@ export default {
 	data() {
 		return {
 			amount:'0.00',
+			note:''
 		};
 	},
 	
 	methods: {
+		
 		submit(){
-			console.log('submit')
-			uni.hideKeyboard()
+			console.log(this.amount)
+			
+			//将amount设置为默认值0.00
+			this.amount = '0.00'
+		},
+		/**
+		 * 获取键盘值
+		 * @param {Object} event
+		 */
+		getValue(event){
+			let value = event.currentTarget.dataset.num
+			if(this.amount==='0.00'){
+				this.amount = value
+				return
+			}
+			this.amount = this.amount+value
+		},
+		/**
+		 * backspace
+		 */
+		backspace(){
+			//如果是0.00  不执行
+			if(this.amount==='0.00'){
+				return
+			}
+			//删除末尾字符
+			this.amount = this.amount.substr(0,this.amount.length-1)
+			//如果字符为空，展示位默认的0.00
+			if(this.amount===''){
+				this.amount='0.00'
+			}
 		}
 	}
 };
@@ -196,8 +227,8 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	width: 25%;
-	padding: 0 0 0 40upx;
+	width: 20%;
+	padding: 0 0 0 20upx;
 }
 
 .keybord-top .note .icon{
@@ -205,12 +236,16 @@ export default {
 	width: 30upx;
 }
 
+.keybord-top .note .text{
+	margin: 0 0 0 16upx;
+}
+
 .keybord-top .note-input{
-	width: 55%;
+	width: 50%;
 }
 
 .keybord-top .amount{
-	width: 20%;
+	width: 30%;
 	text-align: center;
 }
 
@@ -225,8 +260,7 @@ export default {
 }
 
 .keybord-content .item{
-	width: 24.6%;
-	height: 25%;
+	height: 24.8%;
 	background-color: #f0f2f1;
 	border: #ececec 1upx solid;
 	text-align: center;
@@ -235,7 +269,10 @@ export default {
 	justify-content: center;
 	align-items: center;
 	margin: 1upx 0 0 0;
-	/* padding: 25upx 0 0 0; */
+	flex: 1;
+	width: 24.5%;
+	min-width: 24.5%; // 加入这两个后每个item的宽度就生效了
+	max-width: 24.5%; // 加入这两个后每个item的宽度就生效了
 }
 
 .keybord-content .complete{
