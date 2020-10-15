@@ -86,7 +86,10 @@
 				
 				<view class="item number" data-num="."  @click="getValue($event)">.</view>
 				<view class="item number" data-num="0"  @click="getValue($event)">0</view>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6833c45d5e2fb31a7a10ca3dcc0aac26400af24e
 				<view class="item number" data-num="="  @click="getEquals()">=</view>
 				<view class="item complete" @click="submit()">完成</view>
 			</view>
