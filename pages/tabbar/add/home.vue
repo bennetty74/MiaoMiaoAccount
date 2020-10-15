@@ -84,7 +84,7 @@
 				
 				<view class="item number" data-num="."  @click="getValue($event)">.</view>
 				<view class="item number" data-num="0"  @click="getValue($event)">0</view>
-				<view class="item number" data-num="="  @click="getValue($event)">=</view>
+				<view class="item number" @click="getCalResult()">=</view>
 				<view class="item complete" @click="submit()">完成</view>
 			</view>
 		</view>
@@ -136,6 +136,18 @@ export default {
 			//如果字符为空，展示位默认的0.00
 			if(this.amount===''){
 				this.amount='0.00'
+			}
+		},
+		getCalResult(){
+			console.log(this.amount)
+			let nums = []
+			let num =''
+			for(let char of this.amount){
+				if(char=='+'||char=='-'){
+					nums.push(num) 
+				}else{
+					num = num+char
+				}
 			}
 		}
 	}
