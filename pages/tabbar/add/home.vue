@@ -1,45 +1,9 @@
 <template>
 	<view class="content">
 		<view class="category">
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
-			</view>
-			<view class="item">
-				<image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image>
-				<view class="name">购物</view>
+			<view class="item" v-for="(item,index) in categories" @click="categoryCursor=index">
+				<image class="icon" :src="getImgSrc(item,index)"></image>
+				<view class="name" :class="{active:categoryCursor==`${index}`}">{{item.name}}</view>
 			</view>
 		</view>
 		
@@ -51,17 +15,27 @@
 				<!-- <image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image> -->
 				<view class="text">
 					<!-- 微信零钱 -->
-					<picker @change="bindAccountChange" :value="index" :range="accounts">
-						<view class="uni-input">{{accounts[index]}}</view>
+					<picker @change="bindAccountChange" :value="accountIndex" :range="accounts">
+						<view class="uni-input">{{accounts[accountIndex]}}</view>
 					</picker>
 				</view>
 			</view>
 		</view>
 		
+		<view class="note">
+			<view class="input-container">
+				<view class="label">备注</view>
+				<input class="input" type="text" v-model="note"/>
+			</view>
+			<view class="prompt">
+				<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
+			</view>
+		</view>
+		
 		<view class="keybord">
 			<view class="keybord-top">
-				<view class="note">
-					<image class="icon" src="../../../static/img/qa.png" mode=""></image>
+				<view class="left">
+					<image class="icon" src="../../../static/img/add/amount.png" mode=""></image>
 					<text class="text">金额：</text>
 				</view>
 				<view class="amount">
@@ -86,10 +60,6 @@
 				
 				<view class="item number" data-num="."  @click="getValue($event)">.</view>
 				<view class="item number" data-num="0"  @click="getValue($event)">0</view>
-<<<<<<< HEAD
-
-=======
->>>>>>> 6833c45d5e2fb31a7a10ca3dcc0aac26400af24e
 				<view class="item number" data-num="="  @click="getEquals()">=</view>
 				<view class="item complete" @click="submit()">完成</view>
 			</view>
@@ -104,26 +74,96 @@
 export default {
 	data() {
 		return {
-			amount:'0.00',
-			note:'',
-			accounts:['微信零钱','支付宝余额','支付宝余额宝','微信零钱通'],
-			index:0
+			note:'',//输入的备注信息
+			amount:'0.00',//记账金额
+			accounts:['微信零钱','支付宝余额','支付宝余额宝','微信零钱通'],//账户类型，需要根据用户名查询，默认有支付宝、微信和现金
+			accountIndex:0,//账户类型数组下标
+			categoryCursor:0,//分类当前选中的下标
+			categories:[],//记账分类列表
+			notes:['早餐','晚餐','化妆品']//备注可选列表，需要发送交易到后台查询
+			
 		};
 	},
 	
+	mounted(){
+		this.categories = [
+			{
+				name:'购物',
+				iconSrc:'../../../static/img/label/normal/icon_clothes.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_clothes.png'
+			},
+			{
+				name:'吃喝',
+				iconSrc:'../../../static/img/label/normal/icon_food.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_food.png'
+			},{
+				name:'旅行',
+				iconSrc:'../../../static/img/label/normal/icon_tour.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_tour.png'
+			},{
+				name:'日常',
+				iconSrc:'../../../static/img/label/normal/icon_daily.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_daily.png'
+			},{
+				name:'交通',
+				iconSrc:'../../../static/img/label/normal/icon_traffic.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_traffic.png'
+			},{
+				name:'医疗',
+				iconSrc:'../../../static/img/label/normal/icon_medicine.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_medicine.png'
+			},{
+				name:'加油',
+				iconSrc:'../../../static/img/label/normal/icon_fuel.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_fuel.png'
+			},{
+				name:'充值',
+				iconSrc:'../../../static/img/label/normal/icon_phone.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_phone.png'
+			},{
+				name:'学习',
+				iconSrc:'../../../static/img/label/normal/icon_study.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_study.png'
+			},{
+				name:'工资',
+				iconSrc:'../../../static/img/label/normal/icon_salary.png',
+				selectedIconSrc:'../../../static/img/label/selected/icon_salary.png'
+			},
+		]
+	},
+	
 	methods: {
+		getNote(item,index){
+			//追加note到输入框
+			if(this.note.indexOf(item)==-1){
+				this.note = this.note + '#' + item + ' '
+			}
+		},
+		getActiveStatus(item,index){
+			//如果输入框含有该note，class为item
+			if(this.note.indexOf(item)!=-1){
+				return 'item'
+			}
+			//反之为class为active
+			return 'active'
+		},
+		
+		getImgSrc(item,index){
+			if(index == this.categoryCursor){
+				return item.selectedIconSrc
+			}
+			return item.iconSrc
+		},
+		
 		bindAccountChange(e){
-			this.index = e.target.value
-			console.log(this.account)
+			this.accountIndex = e.target.value
+			console.log(this.accounts[this.accountIndex])
 		},
 		submit(){
 			if(this.amount.indexOf('-')!=-1||this.amount.indexOf('+')!=-1){
 				this.getEquals()
 			}
 			console.log(this.amount)
-			
-			//将amount设置为默认值0.00
-			// this.amount = '0.00'
 		},
 		/**
 		 * 获取键盘值
@@ -186,6 +226,11 @@ export default {
 			}else{
 				this.amount=(parseFloat(num1)-parseFloat(num2)).toString()
 			}
+			//如果num2位0，即计算以运算符结尾，那么将amount设置为0，不然计算结果为NAN
+			if(num2 === ''){
+				this.amount='0.00'
+			}
+			
 			console.log(this.amount)
 		}
 	}
@@ -215,9 +260,20 @@ export default {
 	padding: 20upx 0 20upx 0;
 }
 
+.category .item .name{
+	margin: 14upx 0;
+	font-size: 28upx;
+	
+}
+
 .category .item .icon,.account .value .icon{
-	height: 45upx;
-	width: 45upx;
+	height: 50upx;
+	width: 50upx;
+}
+
+.category .item .active{
+	color: #03A174;
+	font-weight: bold;
 }
 
 .account{
@@ -226,19 +282,65 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	margin: 50upx 0 0 0;
-	/* padding: 0 0 0 45upx; */
 	width: 88%;
+}
+
+.account .label,.note .label{
+	color: #acacac;
 }
 
 .account .value{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	/* margin: 0 0 0 50%; */
 }
 
 .account .value .text{
 	margin: 0 0 0 15upx;
+}
+
+.note{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 88%;
+	margin: 50upx 0 0 0;
+}
+
+.note .input-container{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.note .input-container .input{
+	width: 80%;
+	font-size: 24upx;
+	color: #03A174;
+}
+
+.note .prompt{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	margin: 10upx 0 0 0;
+}
+
+.note .prompt .item{
+	font-size: 24upx;
+	margin: 0 0 0 18upx;
+	border: solid #CCCCCC 1upx;
+	border-radius: 8upx;
+	padding: 2upx 6upx;
+	color: #CCCCCC;
+	
+}
+
+.note .prompt .active{
+	border: solid #03A174 1upx;
+	color: #03A174;
 }
 
 .money{
@@ -273,7 +375,7 @@ export default {
 	width: 100%;
 }
 
-.keybord-top .note{
+.keybord-top .left{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -281,12 +383,12 @@ export default {
 	padding: 0 0 0 20upx;
 }
 
-.keybord-top .note .icon{
+.keybord-top .left .icon{
 	height: 40upx;
 	width: 40upx;
 }
 
-.keybord-top .note .text{
+.keybord-top .left .text{
 	margin: 0 0 0 16upx;
 }
 
