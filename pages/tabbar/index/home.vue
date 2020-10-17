@@ -2,26 +2,19 @@
 	<view class="content">
 		<view class="header-container">
 			<view class="date-container">
-				<view class="date">
-					{{formatDateMonth(bill.date)}}
-				</view>
+				<!-- <view class="date">{{formatDateMonth(bill.date)}}</view> -->
+				<picker mode="date" :value="currentYearAndMonth" @change="bindDateChange" fields="month">
+					<view class="date">{{formatDateMonth(currentYearAndMonth)}}</view>
+				</picker>
 			</view>
 			<view class="count-container">
 				<view class="out">
-					<view class="label">
-						支出(元)
-					</view>
-					<view class="value">
-						{{bill.totalOut}}
-					</view>
+					<view class="label">支出(元)</view>
+					<view class="value">{{bill.totalOut}}</view>
 				</view>
 				<view class="in">
-					<view class="label">
-						收入(元)
-					</view>
-					<view class="value">
-						{{bill.totalIn}}
-					</view>
+					<view class="label">收入(元)</view>
+					<view class="value">{{bill.totalIn}}</view>
 				</view>
 			</view>
 		</view>
@@ -30,7 +23,7 @@
 			<view class="card" v-for="(item,index) in bill.billList" :key="index">
 				<view class="total">
 					<view class="left">
-						<image class="icon" src="../../../static/img/qa.png"></image>
+						<image class="icon" src="../../../static/img/index/icon-date.png"></image>
 						<view class="left-label">{{formatDate(item.date)}}</view>
 					</view>
 					<view class="right">
@@ -42,22 +35,32 @@
 					
 				</view>
 				<view class="detail">
-					<view class="item" v-for="(billItem,index) in item.bills" :key="index">
-						<image src="../../../static/img/qa.png" class="icon"></image>
-						<view class="middle">
-							<view class="item-name">{{billItem.label}}</view>
-							<view class="item-user-container">
-								<view class="user">{{billItem.username}}</view>
-								<view class="time">{{formatTime(billItem.time)}}</view>
+					<view v-for="(billItem,index) in item.bills" :key="index">
+						<view class="item" >
+							<image :src="billItem.imgSrc" class="icon"></image>
+							<view class="middle">
+								<view class="item-name">{{billItem.label}}</view>
+								<view class="item-user-container">
+									<view class="user">{{billItem.username}}</view>
+									<view class="time">{{formatTime(billItem.time)}}</view>
+								</view>
+							</view>
+							<view class="right">
+								<view :class="getAmountCategory(billItem,index)" >{{billItem.amount}}</view>
+								<view class="account">{{billItem.account}}</view>
 							</view>
 						</view>
-						<view class="right">
-							<view class="money">{{billItem.amount}}</view>
-							<view class="account">{{billItem.account}}</view>
-						</view>
+						<!-- item间分割线 -->
+						<view class="line" v-if="!isLastItem(item.bills,index)"></view>
 					</view>
+					
+					
 				</view>
 			</view>
+		</view>
+	
+		<view class="footer">
+			没有更多了~
 		</view>
 	
 	</view>
@@ -68,29 +71,67 @@ import moment from 'moment'
 export default {
 	data() {
 		return {
-			bill:{}
+			bill:{},
+			currentYearAndMonth:moment().format('YYYY-MM')
 		};
 	},
 	onLoad() {
-		//通过赋值解决success方法里面的this指向问题
-		let that = this
-		//获取首页账单详情
-		uniCloud.callFunction({
-			name:'getBillDetail',
-			data:{
-				username:'DarLiu&DarQin',
-				date:'2020-10'
-			},
-			success(res) {
-				that.bill = res.result.data[0]
-				console.log(that.bill,'数据')
-			},
-			fail(res) {
-				console.log('fail')
-			}
-		})
+		this.getBills()
 	},
 	methods: {
+		/**日期改变事件
+		 * @param {Object} e
+		 */
+		bindDateChange(e){
+			//设置本地日期
+			this.currentYearAndMonth = e.target.value
+			
+			//发送请求到服务器获取数据
+			this.getBills()
+		},
+		/**
+		 * 获取账单列表
+		 */
+		getBills(){
+			//通过赋值解决success方法里面的this指向问题
+			let that = this
+			//根据年月获取首页账单详情
+			uniCloud.callFunction({
+				name:'getBillDetail',
+				data:{
+					username:'DarLiu&DarQin',
+					date:that.currentYearAndMonth
+				},
+				success(res) {
+					that.bill = res.result.data[0]
+					console.log(that.bill,'数据')
+				},
+				fail(res) {
+					console.log('fail')
+				}
+			})
+		},
+		/**
+		 * 判断是否是当前日最后一条记账记录
+		 * @param {Object} bills
+		 * @param {Object} index
+		 */
+		isLastItem(bills,index){
+			if(index == bills.length-1)
+				return true
+			return false
+		},
+		/**
+		 * 判断金额是消费还是收入，从而绑定不同的class
+		 * @param {Object} billItem
+		 * @param {Object} index
+		 */
+		getAmountCategory(billItem,index){
+			if(billItem.category==='支出'){
+				return 'money-out'
+			}
+			return 'money-in'
+		},
 		/**
 		 * 格式化显示时间
 		 * @param {Object} date
@@ -196,12 +237,14 @@ export default {
 .middle-container .card .total .right{
 	width: 46%;
 	justify-content: flex-end;
-	font-size: 30upx;
+	align-items: flex-end;
+	font-size: 28upx;
+	color: #333333;
 }
 
 .middle-container .card .total .icon{
-	height: 35upx;
-	width: 35upx;
+	height: 40upx;
+	width: 40upx;
 	padding: 5upx 0 0 0;
 	margin:  0 0 0 26upx;
 }
@@ -209,10 +252,21 @@ export default {
 .middle-container .card .total .left-label{
 	margin: 0 0 0 20upx;
 	font-weight: bold;
+	font-size: 28upx;
+	color: #333333;
 }
 
 .in-label{
 	margin: 0 0 0 20upx;
+	font-weight: bold;
+}
+
+.out-label{
+	font-weight: bold;
+}
+
+.in-value{
+	color: #03A174;
 }
 
 .out-value,.in-value{
@@ -225,7 +279,7 @@ export default {
 	margin: 20upx 0 0 0;
 	width: 91%;
 	padding: 0 0 0 20upx;
-	box-shadow: 0px 0px 5px #CCCCCC;
+	box-shadow: 0px 0px 10upx #CCCCCC;
 	border-radius: 10upx;
 }
 
@@ -239,9 +293,12 @@ export default {
 }
 
 .detail .line{
-	width: 80%;
+	width: 85%;
 	height: 1upx;
 	background-color: #CCCCCC;
+	opacity: 0.3;
+	box-shadow: 0 0 2upx #CCCCCC;
+	margin: 0 0 0 13%;
 }
 
 .detail .icon{
@@ -253,39 +310,61 @@ export default {
 	display: flex;
 	flex-direction: column;
 	width: 60%;
-	margin: 0 0 0 40upx;
+	margin: 0 0 0 24upx;
 	padding: 18upx 0;
-	/* border-bottom: #CCCCCC solid 1upx; */
+}
+
+.detail .middle .item-name{
+	font-size: 28upx;
+	font-weight: bold;
+	color: #333333;
 }
 
 .detail .middle .item-user-container{
 	display: flex;
 	flex-direction: row;
+	align-items: flex-end;
 	width: 100%;
 	font-size: 26upx;
+}
+
+.detail .middle .item-user-container .user{
+	color: #333333;
 }
 
 .detail .middle .item-user-container .time{
 	margin: 0 0 0 15upx;
 	font-size: 24upx;
+	color: #333333;
 }
 
 .detail .right{
-	/* margin: 0 0 0 15%; */
 	padding: 18upx 15upx 18upx 0;
 	width: 30%;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	/* padding: 0 10upx 0 0; */
-	
-	/* border-bottom: #CCCCCC solid 1upx; */
+	align-items: flex-end;	
+}
+
+.detail .right .money-out{
+	color: #333333;
+}
+
+.detail .right .money-in{
+	color: #03A174;
 }
 
 .detail .right .account{
-	font-size: 26upx;
+	font-size: 24upx;
+	color: #333333;
 }
 
-
+.footer{
+	font-size: 28upx;
+	color: #CCCCCC;
+	text-align: center;
+	height: 60upx;
+	padding: 10upx 0 0 0;
+}
 
 </style>
