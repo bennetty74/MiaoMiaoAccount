@@ -31,7 +31,11 @@
 		},
 		{
 			"path": "pages/tabbar/mine/home",
-			"style": {}
+			"style": {
+				"app-plus": {
+				        "titleNView": false //禁用原生导航栏
+				}
+			}
 		},
 		{
 			"path": "pages/tabbar-3-detial/tabbar-3-release/tabbar-3-release",
@@ -49,8 +53,8 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		// "navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
 	},
 	"tabBar": {
 		"borderStyle": "black",

@@ -1,5 +1,26 @@
 {
-	"dependencies": {
-		"chart.js": "^2.9.3"
-	}
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "egg-cors": "^2.2.3",
+    "vue-chartjs": "^3.5.1"
+  },
+  "name": "MiaoMiaoAccount",
+  "description": "一款基于uniapp跨端的记账软件\r # 开发进度\r 开发中\r # 开发环境\r HbuilderX Node.js\r # Note\r 寻找志同道合的开发伙伴",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bennetty74/MiaoMiaoAccount.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bennetty74/MiaoMiaoAccount/issues"
+  },
+  "homepage": "https://github.com/bennetty74/MiaoMiaoAccount#readme"
 }
