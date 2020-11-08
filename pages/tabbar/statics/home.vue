@@ -59,8 +59,8 @@ export default {
 		}
 	},
 	onLoad() {
-		this.cWidth = uni.upx2px(750);
-		this.cHeight = uni.upx2px(500);
+		this.cWidth = uni.upx2px(600);
+		this.cHeight = uni.upx2px(450);
 		this.getTotalOutData();
 	},
 	methods: {
@@ -102,14 +102,14 @@ export default {
 				title: {
 					name: '639112087.09',
 					color: '#333333',
-					fontSize: 16 ,
-					offsetY: -5 ,
+					fontSize: 14*this.pixelRatio ,
+					offsetY: 5 ,
 				},
 				subtitle: {
 					name: '总支出',
 					color: '#666666',
 					fontSize: 14 ,
-					offsetY: 0 ,
+					offsetY: 10 ,
 				},
 				extra: {
 					pie: {
@@ -176,15 +176,9 @@ export default {
 	margin-top: 40upx;
 }
 
-.qiun-charts {
-	width: 750upx;
-	height: 500upx;
-	background-color: #FFFFFF;
-}
-
 .charts {
-	width: 750upx;
-	height: 500upx;
+	width: 600upx;
+	height: 450upx;
 	background-color: #FFFFFF;
 }
 </style>

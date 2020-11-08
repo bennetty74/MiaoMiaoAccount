@@ -38,21 +38,47 @@
 			}
 		},
 		{
-			"path": "pages/tabbar-3-detial/tabbar-3-release/tabbar-3-release",
-			"style": {}
+		    "path" : "pages/sign-in/sign-in",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false,
+				"app-plus": {
+				        "titleNView": false //禁用原生导航栏
+				}
+		    }
+		    
 		},
-		{
-			"path": "pages/tabbar-3-detial/tabbar-3-video/tabbar-3-video",
-			"style": {}
-		},
-		{
-			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
-			"style": {}
-		}
-	],
+        {
+            "path" : "pages/sign-up/sign-up",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/mine/acct-manage/acct-manage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账户管理",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/mine/acct-add/acct-add",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "添加账户",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		// "navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
 	},
@@ -67,24 +93,24 @@
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
 				"text": "首页"
 			},
-			{
-				"pagePath": "pages/tabbar/statics/home",
-				"iconPath": "static/img/tabbar/statics.png",
-				"selectedIconPath": "static/img/tabbar/staticsactive.png",
-				"text": "统计"
-			},
+			// {
+			// 	"pagePath": "pages/tabbar/statics/home",
+			// 	"iconPath": "static/img/tabbar/statics.png",
+			// 	"selectedIconPath": "static/img/tabbar/staticsactive.png",
+			// 	"text": "统计"
+			// },
 			{
 				"pagePath": "pages/tabbar/add/home",
 				"iconPath": "static/img/tabbar/add.png",
 				"selectedIconPath": "static/img/tabbar/addactive.png",
 				"text": "添加"
 			},
-			{
-				"pagePath": "pages/tabbar/plan/home",
-				"iconPath": "static/img/tabbar/plan.png",
-				"selectedIconPath": "static/img/tabbar/planactive.png",
-				"text": "计划"
-			},
+			// {
+			// 	"pagePath": "pages/tabbar/plan/home",
+			// 	"iconPath": "static/img/tabbar/plan.png",
+			// 	"selectedIconPath": "static/img/tabbar/planactive.png",
+			// 	"text": "计划"
+			// },
 			{
 				"pagePath": "pages/tabbar/mine/home",
 				"iconPath": "static/img/tabbar/me.png",

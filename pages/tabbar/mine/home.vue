@@ -2,7 +2,7 @@
     <view class="content">
         <view class="header">
             <view class="avatar">
-            	<image class="img" src="../../../static/img/mine/avatar.jpg" mode=""></image>
+            	<image class="img" src="../../../static/img/mine/avatar-boy.png" mode=""></image>
             </view>
 			<view class="info">
 				<view class="nickname">爱学习的小皮喵</view>
@@ -13,7 +13,7 @@
 			</view>
         </view>
 		
-		<view class="middle">
+		<!-- <view class="middle">
 			<view class="item">
 				<view class="value">5</view>
 				<view class="label">目标规划</view>
@@ -25,6 +25,22 @@
 			<view class="item">
 				<view class="value">5</view>
 				<view class="label">记账笔数</view>
+			</view>
+		</view> -->
+		<view class="assets">
+			<view class="net">
+				<view class="label">净资产(元)：</view>
+				<view class="value">{{total_net_assets}}</view>
+			</view>
+			<view class="details-container">
+				<view class="item-container">
+					<view class="label">负债：</view>
+					<view class="debt">{{total_debt}}</view>
+				</view>
+				<view class="item-container">
+					<view class="label">总资产：</view>
+					<view class="total-assets">{{total_assets}}</view>
+				</view>
 			</view>
 		</view>
 		
@@ -46,7 +62,7 @@
 		
 		
 		<view class="menus">
-			<view class="item">
+			<view class="item" @click="toAcctManage">
 				<view class="left">
 					<view class="icon center"><image class="img" src="../../../static/img/add/amount.png" mode=""></image></view>
 					<view class="name">账户管理</view>
@@ -66,11 +82,82 @@
 		</view>
 		
 		<view class="footer">
-			<button class="logout-btn" type="error">退出登录</button>
+			<button class="logout-btn" type="error" @click="logout">退出登录</button>
 		</view>
 		
     </view>
 </template>
+
+<script>
+import util  from '../../../static/js/utils.js'
+export default{
+	data(){
+		return{
+			total_net_assets:'0.00',//净资产
+			total_debt:'0.00',//总负债
+			total_assets:'0.00',//总资产
+			accounts:[],//账户列表
+		}
+	},
+	onLoad() {
+		this.getUserAccountsAndAeests()
+	},
+	
+	methods:{
+		toAcctManage(){
+			uni.navigateTo({
+				url:'acct-manage/acct-manage'
+			})
+		},
+		async getUserAccountsAndAeests(){
+			let that = this;
+			let username = util.getItem("username")
+			console.log(username,"取出来的数据")
+			uniCloud.callFunction({
+				name:'getAccountsAndAssets',
+				data:{
+					username:username,
+				},
+				success(res) {
+					console.log(res.result.data[0],'数据')
+					if(res.result.data&&res.result.data.length!=0){
+						that.total_net_assets = res.result.data[0].total_net_assets
+						that.total_debt = res.result.data[0].total_debt
+						that.total_assets = res.result.data[0].total_assets
+					}else{
+						that.total_net_assets = '0.00'
+						that.total_debt = '0.00'
+						that.total_assets = '0.00'
+					}
+				},
+				fail(res) {
+					console.log('fail')
+				}
+			})
+		},
+		logout(){
+			//清空存储的用户
+			uni.removeStorage({
+				key:"username",
+				success:function(res){
+					console.log(res,"清除storage成功")
+				}
+			})
+			//跳转到登录页面
+			uni.redirectTo({
+				url:"../../sign-in/sign-in",
+				animationType: 'pop-in',
+				animationDuration: 200
+			})
+		}
+	}
+}
+
+
+
+</script>
+
+
 <style>
 
 .center{
@@ -158,6 +245,47 @@
 	font-size: 28upx;
 	
 }
+
+.assets{
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	padding: 30rpx 40rpx;
+	box-shadow: 0 0 5upx #cccccc;
+}
+
+.assets .net{
+	font-size: 40upx;
+	color: #333333;
+	display: flex;
+	flex-direction: row;
+}
+
+.assets .net .value{
+	color: #03A174;
+}
+
+.assets .details-container{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-top: 20rpx;
+	font-size: 32rpx;
+}
+
+.assets .details-container .item-container{
+	display: flex;
+	flex-direction: row;
+	width: 50%;
+}
+.assets .details-container .item-container .debt{
+	color: #DD524D;
+}
+
+.assets .details-container .item-container .total-assets{
+	color: #03A174;
+}
+
 
 /* .bottom{
 	display: flex;

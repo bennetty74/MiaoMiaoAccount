@@ -39,7 +39,7 @@
 						<view class="item" >
 							<image :src="billItem.imgSrc" class="icon"></image>
 							<view class="middle">
-								<view class="item-name">{{billItem.label}}</view>
+								<view class="item-name">{{billItem.category}}</view>
 								<view class="item-user-container">
 									<view class="user">{{billItem.username}}</view>
 									<view class="time">{{formatTime(billItem.time)}}</view>
@@ -68,14 +68,28 @@
 
 <script>
 import moment from 'moment'
+import util  from '../../../static/js/utils.js'
 export default {
 	data() {
 		return {
-			bill:{},
-			currentYearAndMonth:moment().format('YYYY-MM')
+			bill:{
+				totalIn:'0.00',
+				totalOut:'0.00',
+			},
+			currentYearAndMonth:moment().format('YYYY-MM'),
+			username:''
 		};
 	},
-	onLoad() {
+	onShow() {
+		this.username = util.getItem("username")
+		console.log(this.username,"用户名")
+		if(!this.username){
+			uni.redirectTo({
+				url:'../../sign-in/sign-in',
+				animationType: 'pop-in',
+				animationDuration: 200
+			})
+		}
 		this.getBills()
 	},
 	methods: {
@@ -99,12 +113,19 @@ export default {
 			uniCloud.callFunction({
 				name:'getBillDetail',
 				data:{
-					username:'DarLiu&DarQin',
+					username:that.username,
 					date:that.currentYearAndMonth
 				},
 				success(res) {
-					that.bill = res.result.data[0]
-					console.log(that.bill,'数据')
+					console.log(res.result.data)
+					if(res.result.data&&res.result.data.length!=0){
+						that.bill = res.result.data[0]
+					}else{
+						that.bill = {
+							totalIn:'0.00',
+							totalOut:'0.00',
+						}
+					}
 				},
 				fail(res) {
 					console.log('fail')
