@@ -4,10 +4,6 @@
  * @param {Object} x
  */
 function toDecimal(x) {
-	//如果找不到小数点，表示整数
-	if(x.indexOf('.')==-1){
-		x = x+'.00'
-	}
 	return parseFloat(x).toFixed(2); 
 }
 	

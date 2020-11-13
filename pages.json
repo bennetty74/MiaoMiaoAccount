@@ -76,6 +76,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/tabbar/index/bill/bill",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账单详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/mine/userInfoEdit/userInfoEdit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

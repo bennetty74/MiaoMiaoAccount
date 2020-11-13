@@ -6,8 +6,8 @@
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
-		"usingComponents": true,
-		"compilerVersion": 3,
+        "usingComponents" : true,
+        "compilerVersion" : 3,
         /* 5+App特有相关 */
         "modules" : {},
         /* 模块配置 */
@@ -42,7 +42,9 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "push" : {}
+            }
         }
     },
     /* SDK配置 */
@@ -54,6 +56,6 @@
         "setting" : {
             "urlCheck" : true
         },
-        "usingComponents": true
+        "usingComponents" : true
     }
 }

@@ -1,15 +1,15 @@
 <template>
     <view class="content">
-        <view class="header">
+        <view class="header" @click="toUserInfoEdit">
             <view class="avatar">
-            	<image class="img" src="../../../static/img/mine/avatar-boy.png" mode=""></image>
+            	<image class="img" :src="userInfo.avatar" mode=""></image>
             </view>
 			<view class="info">
-				<view class="nickname">爱学习的小皮喵</view>
-				<view class="desc">这个人很懒，什么也没留下~</view>
+				<view class="nickname">{{userInfo.nickname}}</view>
+				<view class="desc">{{userInfo.desc}}</view>
 			</view>
 			<view class="operation">
-				<image class="img" src="../../../static/img/mine/icon-right.png" mode=""></image>
+				<image class="img" src="@/static/img/mine/icon-right.png" mode=""></image>
 			</view>
         </view>
 		
@@ -35,7 +35,7 @@
 			<view class="details-container">
 				<view class="item-container">
 					<view class="label">负债：</view>
-					<view class="debt">{{total_debt}}</view>
+					<view class="debt">-{{total_debt}}</view>
 				</view>
 				<view class="item-container">
 					<view class="label">总资产：</view>
@@ -47,16 +47,16 @@
 		<!-- 勋章 一期暂不实现 -->
 		<!-- <view class="bottom">
 			<view class="item center">
-				<image class="img" src="../../../static/img/add/amount.png" mode=""></image>
+				<image class="img" src="@/static/img/add/amount.png" mode=""></image>
 			</view>
 			<view class="item center">
-				<image class="img" src="../../../static/img/add/amount.png" mode=""></image>
+				<image class="img" src="@/static/img/add/amount.png" mode=""></image>
 			</view>
 			<view class="item center">
-				<image class="img" src="../../../static/img/add/amount.png" mode=""></image>
+				<image class="img" src="@/static/img/add/amount.png" mode=""></image>
 			</view>
 			<view class="item center">
-				<image class="img" src="../../../static/img/add/amount.png" mode=""></image>
+				<image class="img" src="@/static/img/add/amount.png" mode=""></image>
 			</view>
 		</view> -->
 		
@@ -64,19 +64,19 @@
 		<view class="menus">
 			<view class="item" @click="toAcctManage">
 				<view class="left">
-					<view class="icon center"><image class="img" src="../../../static/img/add/amount.png" mode=""></image></view>
+					<view class="icon center"><image class="img" src="@/static/img/add/amount.png" mode=""></image></view>
 					<view class="name">账户管理</view>
 				</view>
 				
-				<view class="right center"><image class="img" src="../../../static/img/mine/icon-right.png" mode=""></image></view>
+				<view class="right center"><image class="img" src="@/static/img/mine/icon-right.png" mode=""></image></view>
 			</view>
 			<view class="line"></view><!-- item间分割线 -->
 			<view class="item">
 				<view class="left">
-					<view class="icon center"><image class="img" src="../../../static/img/add/amount.png" mode=""></image></view>
+					<view class="icon center"><image class="img" src="@/static/img/add/amount.png" mode=""></image></view>
 					<view class="name">关于我们</view>
 				</view>
-				<view class="right center"><image class="img" src="../../../static/img/mine/icon-right.png" mode=""></image></view>
+				<view class="right center"><image class="img" src="@/static/img/mine/icon-right.png" mode=""></image></view>
 			</view>
 			<view class="line"></view><!-- item间分割线 -->
 		</view>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import util  from '../../../static/js/utils.js'
+import util  from '@/static/js/utils.js'
 export default{
 	data(){
 		return{
@@ -97,9 +97,11 @@ export default{
 			total_debt:'0.00',//总负债
 			total_assets:'0.00',//总资产
 			accounts:[],//账户列表
+			userInfo:{}//用户信息
 		}
 	},
 	onLoad() {
+		this.getUserInfo()
 		this.getUserAccountsAndAeests()
 	},
 	
@@ -109,29 +111,47 @@ export default{
 				url:'acct-manage/acct-manage'
 			})
 		},
+		toUserInfoEdit(){
+			uni.navigateTo({
+				url:'userInfoEdit/userInfoEdit?userInfo='+encodeURIComponent(JSON.stringify(this.userInfo))
+			})
+		},
 		async getUserAccountsAndAeests(){
 			let that = this;
 			let username = util.getItem("username")
 			console.log(username,"取出来的数据")
 			uniCloud.callFunction({
-				name:'getAccountsAndAssets',
+				name:'getUserAccts',
 				data:{
 					username:username,
 				},
 				success(res) {
 					console.log(res.result.data[0],'数据')
-					if(res.result.data&&res.result.data.length!=0){
-						that.total_net_assets = res.result.data[0].total_net_assets
-						that.total_debt = res.result.data[0].total_debt
-						that.total_assets = res.result.data[0].total_assets
-					}else{
-						that.total_net_assets = '0.00'
-						that.total_debt = '0.00'
-						that.total_assets = '0.00'
-					}
+					that.accounts = res.result.data[0].accounts
+					that.total_net_assets = res.result.data[0].total_net_assets
+					that.total_debt = res.result.data[0].total_debt
+					that.total_assets = res.result.data[0].total_assets
 				},
 				fail(res) {
 					console.log('fail')
+				}
+			})
+		},
+		async getUserInfo(){
+			let that = this;
+			let username = util.getItem("username")
+			console.log(username,"取出来的数据")
+			uniCloud.callFunction({
+				name:'getUserInfo',
+				data:{
+					username:username,
+				},
+				success(res) {
+					console.log(res.result,"获取user info")
+					that.userInfo = res.result.data[0]
+				},
+				fail(res) {
+					console.log('fail',res)
 				}
 			})
 		},

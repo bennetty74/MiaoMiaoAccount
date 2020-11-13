@@ -23,7 +23,7 @@
 			<view class="card" v-for="(item,index) in bill.billList" :key="index">
 				<view class="total">
 					<view class="left">
-						<image class="icon" src="../../../static/img/index/icon-date.png"></image>
+						<image class="icon" src="@/static/img/index/icon-date.png"></image>
 						<view class="left-label">{{formatDate(item.date)}}</view>
 					</view>
 					<view class="right">
@@ -35,8 +35,8 @@
 					
 				</view>
 				<view class="detail">
-					<view v-for="(billItem,index) in item.bills" :key="index">
-						<view class="item" >
+					<view v-for="(billItem,i) in item.bills" :key="i">
+						<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
 							<image :src="billItem.imgSrc" class="icon"></image>
 							<view class="middle">
 								<view class="item-name">{{billItem.category}}</view>
@@ -46,12 +46,12 @@
 								</view>
 							</view>
 							<view class="right">
-								<view :class="getAmountCategory(billItem,index)" >{{billItem.amount}}</view>
+								<view :class="getAmountCategory(billItem,i)" >{{billItem.amount}}</view>
 								<view class="account">{{billItem.account}}</view>
 							</view>
 						</view>
 						<!-- item间分割线 -->
-						<view class="line" v-if="!isLastItem(item.bills,index)"></view>
+						<view class="line" v-if="!isLastItem(item.bills,i)"></view>
 					</view>
 					
 					
@@ -68,7 +68,7 @@
 
 <script>
 import moment from 'moment'
-import util  from '../../../static/js/utils.js'
+import util  from '@/static/js/utils.js'
 export default {
 	data() {
 		return {
@@ -93,6 +93,22 @@ export default {
 		this.getBills()
 	},
 	methods: {
+		/**
+		 * touch move 事件
+		 */
+		touchEvent(e){
+			console.log("toch")
+		},
+		/**
+		 * 跳转到账单详情界面
+		 */
+		toBillDetail(index,i){
+			console.log("click item",this.bill.billList[index].bills[i])
+			uni.navigateTo({
+				url:"bill/bill?item="+ encodeURIComponent(JSON.stringify(this.bill.billList[index].bills[i]))
+				+'&bill='+encodeURIComponent(JSON.stringify(this.bill))
+			})
+		},
 		/**日期改变事件
 		 * @param {Object} e
 		 */
@@ -138,6 +154,7 @@ export default {
 		 * @param {Object} index
 		 */
 		isLastItem(bills,index){
+			console.log(index == bills.length-1,index,"是否最后一个")
 			if(index == bills.length-1)
 				return true
 			return false
@@ -179,11 +196,11 @@ export default {
 
 <style>
 .content {
-	/* margin: 200upx 0 0 0; */
 	width: 100%;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	background-color: #F8F8F8;
 }
 
 .header-container{
@@ -192,7 +209,7 @@ export default {
 	align-items: center;
 	width: 100%;
 	padding: 100upx 0 0 0;
-	/* background-image: url(../../../static/img/index/header_bg.jpg); */
+	/* background-image: url(@/static/img/index/header_bg.jpg); */
 	background-color: #03a174;
 	height: 320upx;
 	color: #FFFFFF;

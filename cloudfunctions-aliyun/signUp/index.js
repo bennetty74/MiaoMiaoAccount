@@ -14,7 +14,11 @@ exports.main = async (event, context) => {
 		let res = await db.collection("user").add({
 			username:event.username,
 			password:encryPassword(event.password),
-			status: 0
+			status: 0,
+			nickname:"点击设置您的昵称",
+			desc:"点击设置您的个人简介",
+			avatar:"/static/img/mine/avatar-boy.png",
+			male:""
 		})
 		console.log(res,"插入数据的反馈")
 		return {code:"success",msg:"注册成功"}

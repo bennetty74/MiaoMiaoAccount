@@ -12,11 +12,10 @@
 				账户
 			</view>
 			<view class="value">
-				<!-- <image class="icon" src="../../../static/img/tabbar/add.png" mode=""></image> -->
+				<!-- <image class="icon" src="@/static/img/tabbar/add.png" mode=""></image> -->
 				<view class="text">
-					<!-- 微信零钱 -->
-					<picker @change="bindAccountChange" :value="accountIndex" :range="accounts">
-						<view class="uni-input">{{accounts[accountIndex]}}</view>
+					<picker @change="bindAccountChange" :value="accountIndex" :range="accounts" :range-key="'option'">
+						<view class="uni-input">{{accounts[accountIndex].name}}({{accounts[accountIndex].card_number}})</view>
 					</picker>
 				</view>
 			</view>
@@ -25,7 +24,7 @@
 		<view class="note">
 			<view class="input-container">
 				<view class="label">备注</view>
-				<input class="input" type="text" v-model="note" />
+				<input class="input" type="text" v-model="note"/>
 			</view>
 			<view class="prompt">
 				<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
@@ -35,7 +34,7 @@
 		<view class="keybord">
 			<view class="keybord-top">
 				<view class="left">
-					<image class="icon" src="../../../static/img/add/amount.png" mode=""></image>
+					<image class="icon" src="@/static/img/add/amount.png" mode=""></image>
 					<text class="text">金额：</text>
 				</view>
 				<view class="amount">
@@ -48,7 +47,7 @@
 					<view class="item number" data-num="8" @click="getValue($event)">8</view>
 					<view class="item number" data-num="9" @click="getValue($event)">9</view>
 					<view class="item number" @click="backspace()">
-						<image src="../../../static/img/add/backspace.png" class="icon"></image>
+						<image src="@/static/img/add/backspace.png" class="icon"></image>
 					</view>
 				</view>
 
@@ -79,7 +78,7 @@
 
 <script>
 	import moment from "moment"
-	import util from '../../../static/js/utils.js'
+	import util from '@/static/js/utils.js'
 	export default {
 		data() {
 			return {
@@ -98,45 +97,45 @@
 			this.username = util.getItem("username")
 			this.categories = [{
 					name: '购物',
-					iconSrc: '../../../static/img/label/normal/icon_clothes.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_clothes.png'
+					iconSrc: require('@/static/img/label/normal/icon_clothes.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_clothes.png'),
 				},
 				{
 					name: '吃喝',
-					iconSrc: '../../../static/img/label/normal/icon_food.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_food.png'
+					iconSrc: require('@/static/img/label/normal/icon_food.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_food.png')
 				}, {
 					name: '旅行',
-					iconSrc: '../../../static/img/label/normal/icon_tour.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_tour.png'
+					iconSrc: require('@/static/img/label/normal/icon_tour.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_tour.png')
 				}, {
 					name: '日常',
-					iconSrc: '../../../static/img/label/normal/icon_daily.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_daily.png'
+					iconSrc: require('@/static/img/label/normal/icon_daily.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_daily.png')
 				}, {
 					name: '交通',
-					iconSrc: '../../../static/img/label/normal/icon_traffic.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_traffic.png'
+					iconSrc: require('@/static/img/label/normal/icon_traffic.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_traffic.png')
 				}, {
 					name: '医疗',
-					iconSrc: '../../../static/img/label/normal/icon_medicine.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_medicine.png'
+					iconSrc: require('@/static/img/label/normal/icon_medicine.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_medicine.png')
 				}, {
 					name: '加油',
-					iconSrc: '../../../static/img/label/normal/icon_fuel.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_fuel.png'
+					iconSrc: require('@/static/img/label/normal/icon_fuel.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_fuel.png')
 				}, {
 					name: '充值',
-					iconSrc: '../../../static/img/label/normal/icon_phone.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_phone.png'
+					iconSrc: require('@/static/img/label/normal/icon_phone.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_phone.png')
 				}, {
 					name: '学习',
-					iconSrc: '../../../static/img/label/normal/icon_study.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_study.png'
+					iconSrc: require('@/static/img/label/normal/icon_study.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_study.png')
 				}, {
 					name: '工资',
-					iconSrc: '../../../static/img/label/normal/icon_salary.png',
-					selectedIconSrc: '../../../static/img/label/selected/icon_salary.png'
+					iconSrc: require('@/static/img/label/normal/icon_salary.png'),
+					selectedIconSrc: require('@/static/img/label/selected/icon_salary.png')
 				},
 			]
 			this.getUserAccountsAndAeests();
@@ -159,10 +158,12 @@
 					success(res) {
 						if (res.result.data && res.result.data.length != 0) {
 							let accounts = res.result.data[0].accounts;
+							//遍历添加新的选项
 							for (let i in accounts) {
+								accounts[i].option = accounts[i].name+'('+accounts[i].card_number+')'
 								console.log(accounts[i], "账户")
-								that.accounts.push(accounts[i].name)
 							}
+							that.accounts = accounts
 						} else {
 							console.log("请先创建账户")
 						}
@@ -300,7 +301,7 @@
 						username: that.username,
 						amount: util.toDecimal(that.amount),
 						label: that.note,
-						account: that.accounts[that.accountIndex],
+						account: that.accounts[that.accountIndex].name+'('+that.accounts[that.accountIndex].card_number+')',
 						category: that.categories[that.categoryCursor].name,
 						imgSrc: that.categories[that.categoryCursor].selectedIconSrc,
 						time: moment().format("YYYY-MM-DD HH:mm:ss"),
