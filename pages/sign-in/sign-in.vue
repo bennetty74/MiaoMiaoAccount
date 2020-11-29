@@ -14,19 +14,23 @@
 				<input class="value" type="password" v-model="password" placeholder="请输入密码"/>
 			</view>
 		</view>
-		<view class="submit" @click="signIn">登录</view>
+		<submit text="登录" @clickEvent="signIn"></submit>
 		<view class="sign-up" @click="toSignUp">还没有账户？点击注册</view>
 	</view>
 </template>
 
 <script>
 import util  from '../../static/js/utils.js'
+import submit from '../components/submit.vue'
 	export default {
 		data() {
 			return {
 				username:'',
 				password:''
 			}
+		},
+		components:{
+			submit
 		},
 		mounted() {
 			
@@ -58,13 +62,20 @@ import util  from '../../static/js/utils.js'
 					},
 					success(res) {
 						console.log(res.result)
+						uni.showToast({
+							title:"登录成功",
+							duration:5000
+						})
 						if(res.result.code === 'success'){
 							util.setItem("username",that.username)
-							uni.switchTab({
-								url:"../tabbar/index/home",
-								animationType: 'pop-in',
-								animationDuration: 200,
+							setTimeout(function(){
+								uni.switchTab({
+									url:"../tabbar/index/home",
+									animationType: 'pop-in',
+									animationDuration: 200,
+								},2000)
 							})
+							
 						}
 					},
 					fail(res) {
@@ -119,18 +130,6 @@ import util  from '../../static/js/utils.js'
 	padding-top: 10rpx;
 	border-bottom: #CCCCCC solid 1rpx;
 	width: 100%;
-}
-
-
-.submit{
-	width: 80%;
-	background-color: #03A174;
-	border-radius: 10rpx;
-	height: 60rpx;
-	color: #FFFFFF;
-	text-align: center;
-	margin-top: 60rpx;
-	padding-top: 10rpx;
 }
 
 .sign-up{

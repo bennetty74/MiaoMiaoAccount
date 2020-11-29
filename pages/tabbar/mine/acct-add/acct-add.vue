@@ -46,12 +46,13 @@
 				<input class="value" type="text" v-model="note" placeholder="如工资卡/消费卡等"/>
 			</view>
 		</view>
-		<view class="button" @click="submit">添加</view>
+		<submit text="添加" @clickEvent="submit()"></submit>
 	</view>
 </template>
 
 <script>
 import util from '@/static/js/utils.js'
+	import submit from '../../../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -90,6 +91,9 @@ import util from '@/static/js/utils.js'
 				cardNumber:'',//银行卡后四位
 				note:'',//银行卡备注
 			}
+		},
+		components:{
+			submit
 		},
 		onShow() {
 			
@@ -244,17 +248,5 @@ import util from '@/static/js/utils.js'
 	width: 100%;
 	height: 1rpx;
 	background-color: #CCCCCC;
-}
-.button{
-	width: 90%;
-	height: 80rpx;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	background-color: #03A174;
-	color: #FFFFFF;
-	margin-top: 60rpx;
-	border-radius: 10rpx;
 }
 </style>

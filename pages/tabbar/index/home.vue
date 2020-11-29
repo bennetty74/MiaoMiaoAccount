@@ -37,7 +37,8 @@
 				<view class="detail">
 					<view v-for="(billItem,i) in item.bills" :key="i">
 						<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
-							<image :src="billItem.imgSrc" class="icon"></image>
+							<!-- <image :src="billItem.imgSrc" class="icon"></image> -->
+							<view class="iconfont" :class="item.imgSrc"></view>
 							<view class="middle">
 								<view class="item-name">{{billItem.category}}</view>
 								<view class="item-user-container">
@@ -53,8 +54,6 @@
 						<!-- item间分割线 -->
 						<view class="line" v-if="!isLastItem(item.bills,i)"></view>
 					</view>
-					
-					
 				</view>
 			</view>
 		</view>

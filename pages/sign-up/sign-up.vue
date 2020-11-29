@@ -18,12 +18,13 @@
 				<input class="value" type="password" v-model="repeatPassword" placeholder="请确认输入密码"/>
 			</view>
 		</view>
-		<view class="submit" @click="signUp">注册</view>
-		<view class="sign-up" @click="toSignIn">已有账户？点击登录</view>
+		<submit text="注册" @clickEvent="signUp"></submit>
+		<view class="sign-in" @click="toSignIn">已有账户？点击登录</view>
 	</view>
 </template>
 
 <script>
+	import submit from '../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -31,6 +32,9 @@
 				password:'',
 				repeatPassword:''
 			}
+		},
+		components:{
+			submit
 		},
 		methods: {
 			toSignIn(){
@@ -66,6 +70,10 @@
 					},
 					success(res) {
 						console.log(res.result)
+						uni.showToast({
+							title:"注册成功",
+							duration:1000
+						})
 						if(res.result.code === 'success'){
 							uni.redirectTo({
 								url:'../sign-in/sign-in'
@@ -126,19 +134,7 @@
 	width: 100%;
 }
 
-
-.submit{
-	width: 80%;
-	background-color: #03A174;
-	border-radius: 10rpx;
-	height: 60rpx;
-	color: #FFFFFF;
-	text-align: center;
-	margin-top: 60rpx;
-	padding-top: 10rpx;
-}
-
-.sign-up{
+.sign-in{
 	width: 80%;
 	display: flex;
 	flex-direction: row;

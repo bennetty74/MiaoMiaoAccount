@@ -71,7 +71,7 @@
 				<view class="right center"><image class="img" src="@/static/img/mine/icon-right.png" mode=""></image></view>
 			</view>
 			<view class="line"></view><!-- item间分割线 -->
-			<view class="item">
+			<view class="item" @click="toAboutUs">
 				<view class="left">
 					<view class="icon center"><image class="img" src="@/static/img/add/amount.png" mode=""></image></view>
 					<view class="name">关于我们</view>
@@ -82,7 +82,7 @@
 		</view>
 		
 		<view class="footer">
-			<button class="logout-btn" type="error" @click="logout">退出登录</button>
+			<submit text="退出登录" @clickEvent="logout"></submit>
 		</view>
 		
     </view>
@@ -90,6 +90,7 @@
 
 <script>
 import util  from '@/static/js/utils.js'
+import submit from '../../components/submit.vue'
 export default{
 	data(){
 		return{
@@ -104,8 +105,15 @@ export default{
 		this.getUserInfo()
 		this.getUserAccountsAndAeests()
 	},
-	
+	components:{
+		submit
+	},
 	methods:{
+		toAboutUs(){
+			uni.navigateTo({
+				url:'aboutUs/aboutUs'
+			})
+		},
 		toAcctManage(){
 			uni.navigateTo({
 				url:'acct-manage/acct-manage'
@@ -381,12 +389,11 @@ export default{
 	width: 80%;
 	height: 60upx;
 	padding: 80upx 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
-.footer .logout-btn{
-	background-color: #03A174;
-	color: #FFFFFF;
-}
 
 
 </style>

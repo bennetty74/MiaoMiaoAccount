@@ -94,6 +94,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/tabbar/mine/aboutUs/aboutUs",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "关于我们",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/plan/set-plan/set-plan",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "设置预算",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -111,24 +129,24 @@
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
 				"text": "首页"
 			},
-			// {
-			// 	"pagePath": "pages/tabbar/statics/home",
-			// 	"iconPath": "static/img/tabbar/statics.png",
-			// 	"selectedIconPath": "static/img/tabbar/staticsactive.png",
-			// 	"text": "统计"
-			// },
+			{
+				"pagePath": "pages/tabbar/statics/home",
+				"iconPath": "static/img/tabbar/statics.png",
+				"selectedIconPath": "static/img/tabbar/staticsactive.png",
+				"text": "统计"
+			},
 			{
 				"pagePath": "pages/tabbar/add/home",
 				"iconPath": "static/img/tabbar/add.png",
 				"selectedIconPath": "static/img/tabbar/addactive.png",
 				"text": "添加"
 			},
-			// {
-			// 	"pagePath": "pages/tabbar/plan/home",
-			// 	"iconPath": "static/img/tabbar/plan.png",
-			// 	"selectedIconPath": "static/img/tabbar/planactive.png",
-			// 	"text": "计划"
-			// },
+			{
+				"pagePath": "pages/tabbar/plan/home",
+				"iconPath": "static/img/tabbar/plan.png",
+				"selectedIconPath": "static/img/tabbar/planactive.png",
+				"text": "计划"
+			},
 			{
 				"pagePath": "pages/tabbar/mine/home",
 				"iconPath": "static/img/tabbar/me.png",

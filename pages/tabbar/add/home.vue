@@ -2,8 +2,8 @@
 	<view class="content">
 		<view class="category">
 			<view class="item" v-for="(item,index) in categories" @click="onCategoryChange(index)">
-				<image class="icon" :src="getImgSrc(item,index)"></image>
-				<view class="name" :class="{active:categoryCursor==`${index}`}">{{item.name}}</view>
+				<view class="iconfont" :class="[{active:index==categoryCursor},item.class]" @click="onCategoryChange(index)"></view>
+				<view class="name" :class="{active:categoryCursor==index}">{{item.name}}</view>
 			</view>
 		</view>
 
@@ -12,7 +12,6 @@
 				账户
 			</view>
 			<view class="value">
-				<!-- <image class="icon" src="@/static/img/tabbar/add.png" mode=""></image> -->
 				<view class="text">
 					<picker @change="bindAccountChange" :value="accountIndex" :range="accounts" :range-key="'option'">
 						<view class="uni-input">{{accounts[accountIndex].name}}({{accounts[accountIndex].card_number}})</view>
@@ -30,11 +29,10 @@
 				<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
 			</view>
 		</view>
-
 		<view class="keybord">
 			<view class="keybord-top">
 				<view class="left">
-					<image class="icon" src="@/static/img/add/amount.png" mode=""></image>
+					<view class="iconfont icon-jine" style="color: #03A174;font-size: 40rpx;"></view>
 					<text class="text">金额：</text>
 				</view>
 				<view class="amount">
@@ -97,46 +95,36 @@
 			this.username = util.getItem("username")
 			this.categories = [{
 					name: '购物',
-					iconSrc: require('@/static/img/label/normal/icon_clothes.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_clothes.png'),
+					class:"icon-gouwu"
 				},
 				{
 					name: '吃喝',
-					iconSrc: require('@/static/img/label/normal/icon_food.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_food.png')
+					class:"icon-icon_food"
 				}, {
 					name: '旅行',
-					iconSrc: require('@/static/img/label/normal/icon_tour.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_tour.png')
+					class:"icon-icon_tour"
 				}, {
-					name: '日常',
-					iconSrc: require('@/static/img/label/normal/icon_daily.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_daily.png')
+					name: '宠物',
+					class:"icon-jianqu"
 				}, {
 					name: '交通',
-					iconSrc: require('@/static/img/label/normal/icon_traffic.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_traffic.png')
+					class:"icon-jiaotong"
 				}, {
 					name: '医疗',
-					iconSrc: require('@/static/img/label/normal/icon_medicine.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_medicine.png')
-				}, {
-					name: '加油',
-					iconSrc: require('@/static/img/label/normal/icon_fuel.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_fuel.png')
+					class:"icon-yiliao"
 				}, {
 					name: '充值',
-					iconSrc: require('@/static/img/label/normal/icon_phone.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_phone.png')
+					class:"icon-huafeichongzhi"
 				}, {
 					name: '学习',
-					iconSrc: require('@/static/img/label/normal/icon_study.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_study.png')
+					class:"icon-icon_study"
 				}, {
 					name: '工资',
-					iconSrc: require('@/static/img/label/normal/icon_salary.png'),
-					selectedIconSrc: require('@/static/img/label/selected/icon_salary.png')
-				},
+					class:"icon-icon_salary"
+				}, {
+					name: '其他',
+					class:"icon-icon_other"
+				}
 			]
 			this.getUserAccountsAndAeests();
 			this.getNotesFromServer()
@@ -303,7 +291,7 @@
 						label: that.note,
 						account: that.accounts[that.accountIndex].name+'('+that.accounts[that.accountIndex].card_number+')',
 						category: that.categories[that.categoryCursor].name,
-						imgSrc: that.categories[that.categoryCursor].selectedIconSrc,
+						imgSrc: that.categories[that.categoryCursor].class,
 						time: moment().format("YYYY-MM-DD HH:mm:ss"),
 						dateMonth: moment().format("YYYY-MM"),
 						date: moment().format("YYYY-MM-DD")
@@ -355,7 +343,7 @@
 
 	}
 
-	.category .item .icon,
+	.category .item .iconfont,
 	.account .value .icon {
 		height: 50upx;
 		width: 50upx;
