@@ -1,53 +1,57 @@
 <template>
-	<view class="content">
-		<view class="header-container">
-			<view class="top">
-				<view class="left">11月总预算</view>
-				<view class="set-btn" @click="toSetPlan">设置预算</view>
-			</view>
-			<view class="bottom">
-				<view class="left">
-					<canvas canvas-id="canvasCircle" id="canvasCircle" class="canvas-circle"></canvas>
+	<view>
+		<view class="content">
+			<view class="header-container">
+				<view class="top">
+					<view class="left">11月总预算</view>
+					<view class="set-btn" @click="toSetPlan">设置预算</view>
 				</view>
-				<view class="right">
-					<view class="item">
-						<view class="label">本月预算</view>
-						<view class="value">{{plan.plan}}</view>
+				<view class="bottom">
+					<view class="left">
+						<canvas canvas-id="canvasCircle" id="canvasCircle" class="canvas-circle"></canvas>
 					</view>
-					<view class="item-mini">
-						<view class="label">剩余预算</view>
-						<view class="value">{{plan.remain}}</view>
-					</view>
-					<view class="item-mini">
-						<view class="label">本月支出</view>
-						<view class="value">{{plan.cost}}</view>
+					<view class="right">
+						<view class="item">
+							<view class="label">本月预算</view>
+							<view class="value">{{plan.plan}}</view>
+						</view>
+						<view class="item-mini">
+							<view class="label">剩余预算</view>
+							<view class="value">{{plan.remain}}</view>
+						</view>
+						<view class="item-mini">
+							<view class="label">本月支出</view>
+							<view class="value">{{plan.cost}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="list-container">
-			<view class="title">本月消费Top5</view>
-			<view class="detail">
-				<view v-for="(item,i) in bills" :key="i">
-					<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
-						<view  class="icon iconfont icon-jine selected"></view>
-						<view class="middle">
-							<view class="item-name">{{item.category}}</view>
-							<view class="item-user-container">
-								<view class="user">{{item.username}}</view>
-								<view class="time">{{formatTime(item.time)}}</view>
+			<view class="list-container">
+				<view class="title">本月消费Top5</view>
+				<view class="detail">
+					<view v-for="(item,i) in bills" :key="i">
+						<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
+							<view  class="icon iconfont icon-jine selected"></view>
+							<view class="middle">
+								<view class="item-name">{{item.category}}</view>
+								<view class="item-user-container">
+									<view class="user">{{item.username}}</view>
+									<view class="time">{{formatTime(item.time)}}</view>
+								</view>
+							</view>
+							<view class="right">
+								<view class="money-out" >{{item.amount}}</view>
+								<view class="account">{{item.account}}</view>
 							</view>
 						</view>
-						<view class="right">
-							<view class="money-out" >{{item.amount}}</view>
-							<view class="account">{{item.account}}</view>
-						</view>
+						<!-- item间分割线 -->
+						<view class="line" v-if="!isLastItem(bills,i)"></view>
 					</view>
-					<!-- item间分割线 -->
-					<view class="line" v-if="!isLastItem(bills,i)"></view>
 				</view>
 			</view>
 		</view>
+		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
+		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -60,6 +64,7 @@ var canvasCircle;
 export default {
 	data() {
 		return {
+			tabbars:'',
 			cWidth3:'',//圆弧进度图
 			cHeight3:'',//圆弧进度图
 			arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
@@ -85,6 +90,39 @@ export default {
 	},
 	onLoad() {
 		this.username = util.getItem("username")
+		this.tabbars = [{
+					"pagePath": "/pages/tabbar/index/home",
+					"iconPath": "/static/img/tabbar/home.png",
+					"selectedIconPath": "/static/img/tabbar/homeactive.png",
+					"text": "首页"
+				},
+				{
+					"pagePath": "/pages/tabbar/statics/home",
+					"iconPath": "/static/img/tabbar/statics.png",
+					"selectedIconPath": "/static/img/tabbar/staticsactive.png",
+					"text": "统计"
+				},
+				{
+					"pagePath": "/pages/tabbar/add/home",
+					"iconPath": "/static/img/tabbar/add.png",
+					"selectedIconPath": "/static/img/tabbar/addactive.png",
+					"midButton":true,
+					"text": "添加"
+				},
+				{
+					"pagePath": "/pages/tabbar/plan/home",
+					"iconPath": "/static/img/tabbar/plan.png",
+					"selectedIconPath": "/static/img/tabbar/planactive.png",
+					"text": "计划"
+				},
+				{
+					"pagePath": "/pages/tabbar/mine/home",
+					"iconPath": "/static/img/tabbar/me.png",
+					"selectedIconPath": "/static/img/tabbar/meactive.png",
+					"text": "我的"
+				}
+			]
+		
 		_self = this;
 		this.cWidth3=uni.upx2px(200);//这里要与样式的宽高对应
 		this.cHeight3=uni.upx2px(200);//这里要与样式的宽高对应

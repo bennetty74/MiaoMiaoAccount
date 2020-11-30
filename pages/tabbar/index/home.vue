@@ -1,68 +1,74 @@
 <template>
-	<view class="content">
-		<view class="header-container">
-			<view class="date-container">
-				<!-- <view class="date">{{formatDateMonth(bill.date)}}</view> -->
-				<picker mode="date" :value="currentYearAndMonth" @change="bindDateChange" fields="month">
-					<view class="date">{{formatDateMonth(currentYearAndMonth)}}</view>
-				</picker>
-			</view>
-			<view class="count-container">
-				<view class="out">
-					<view class="label">支出(元)</view>
-					<view class="value">{{bill.totalOut}}</view>
+	<view>
+		<view class="content">
+			<view class="header-container">
+				<view class="date-container">
+					<!-- <view class="date">{{formatDateMonth(bill.date)}}</view> -->
+					<picker mode="date" :value="currentYearAndMonth" @change="bindDateChange" fields="month">
+						<view class="date">{{formatDateMonth(currentYearAndMonth)}}</view>
+					</picker>
 				</view>
-				<view class="in">
-					<view class="label">收入(元)</view>
-					<view class="value">{{bill.totalIn}}</view>
-				</view>
-			</view>
-		</view>
-	
-		<view class="middle-container">
-			<view class="card" v-for="(item,index) in bill.billList" :key="index">
-				<view class="total">
-					<view class="left">
-						<image class="icon" src="@/static/img/index/icon-date.png"></image>
-						<view class="left-label">{{formatDate(item.date)}}</view>
+				<view class="count-container">
+					<view class="out">
+						<view class="label">支出(元)</view>
+						<view class="value">{{bill.totalOut}}</view>
 					</view>
-					<view class="right">
-						<view class="out-label">支</view>
-						<view class="out-value">{{item.dateTotalOut}}</view>
-						<view class="in-label">收</view>
-						<view class="in-value">{{item.dateTotalIn}}</view>
+					<view class="in">
+						<view class="label">收入(元)</view>
+						<view class="value">{{bill.totalIn}}</view>
 					</view>
-					
 				</view>
-				<view class="detail">
-					<view v-for="(billItem,i) in item.bills" :key="i">
-						<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
-							<!-- <image :src="billItem.imgSrc" class="icon"></image> -->
-							<view class="iconfont" :class="item.imgSrc"></view>
-							<view class="middle">
-								<view class="item-name">{{billItem.category}}</view>
-								<view class="item-user-container">
-									<view class="user">{{billItem.username}}</view>
-									<view class="time">{{formatTime(billItem.time)}}</view>
+			</view>
+		
+			<view class="middle-container">
+				<view class="card" v-for="(item,index) in bill.billList" :key="index">
+					<view class="total">
+						<view class="left">
+							<image class="icon" src="@/static/img/index/icon-date.png"></image>
+							<view class="left-label">{{formatDate(item.date)}}</view>
+						</view>
+						<view class="right">
+							<view class="out-label">支</view>
+							<view class="out-value">{{item.dateTotalOut}}</view>
+							<view class="in-label">收</view>
+							<view class="in-value">{{item.dateTotalIn}}</view>
+						</view>
+						
+					</view>
+					<view class="detail">
+						<view v-for="(billItem,i) in item.bills" :key="i">
+							<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
+								<!-- <image :src="billItem.imgSrc" class="icon"></image> -->
+								<view class="iconfont" :class="item.imgSrc"></view>
+								<view class="middle">
+									<view class="item-name">{{billItem.category}}</view>
+									<view class="item-user-container">
+										<view class="user">{{billItem.username}}</view>
+										<view class="time">{{formatTime(billItem.time)}}</view>
+									</view>
+								</view>
+								<view class="right">
+									<view :class="getAmountCategory(billItem,i)" >{{billItem.amount}}</view>
+									<view class="account">{{billItem.account}}</view>
 								</view>
 							</view>
-							<view class="right">
-								<view :class="getAmountCategory(billItem,i)" >{{billItem.amount}}</view>
-								<view class="account">{{billItem.account}}</view>
-							</view>
+							<!-- item间分割线 -->
+							<view class="line" v-if="!isLastItem(item.bills,i)"></view>
 						</view>
-						<!-- item间分割线 -->
-						<view class="line" v-if="!isLastItem(item.bills,i)"></view>
 					</view>
 				</view>
 			</view>
+		
+			<view class="footer">
+				没有更多了~
+			</view>
+		
 		</view>
-	
-		<view class="footer">
-			没有更多了~
-		</view>
-	
+		
+		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
+		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
 	</view>
+	
 </template>
 
 <script>
@@ -71,6 +77,7 @@ import util  from '@/static/js/utils.js'
 export default {
 	data() {
 		return {
+			tabbars: '',
 			bill:{
 				totalIn:'0.00',
 				totalOut:'0.00',
@@ -78,6 +85,40 @@ export default {
 			currentYearAndMonth:moment().format('YYYY-MM'),
 			username:''
 		};
+	},
+	onLoad(){
+		this.tabbars = [{
+				"pagePath": "/pages/tabbar/index/home",
+				"iconPath": "/static/img/tabbar/home.png",
+				"selectedIconPath": "/static/img/tabbar/homeactive.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "/pages/tabbar/statics/home",
+				"iconPath": "/static/img/tabbar/statics.png",
+				"selectedIconPath": "/static/img/tabbar/staticsactive.png",
+				"text": "统计"
+			},
+			{
+				"pagePath": "/pages/tabbar/add/home",
+				"iconPath": "/static/img/tabbar/add.png",
+				"selectedIconPath": "/static/img/tabbar/addactive.png",
+				"midButton":true,
+				"text": "添加"
+			},
+			{
+				"pagePath": "/pages/tabbar/plan/home",
+				"iconPath": "/static/img/tabbar/plan.png",
+				"selectedIconPath": "/static/img/tabbar/planactive.png",
+				"text": "计划"
+			},
+			{
+				"pagePath": "/pages/tabbar/mine/home",
+				"iconPath": "/static/img/tabbar/me.png",
+				"selectedIconPath": "/static/img/tabbar/meactive.png",
+				"text": "我的"
+			}
+		]
 	},
 	onShow() {
 		this.username = util.getItem("username")

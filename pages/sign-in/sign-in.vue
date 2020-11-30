@@ -6,12 +6,15 @@
 		</view>
 		<view class="body">
 			<view class="account">
-				<view class="label">用户名</view>
-				<input class="value" type="text" v-model="username" placeholder="请输入用户名"/>
+				<!-- <view class="label">用户名</view> -->
+				<!-- <input class="value" type="text" v-model="username" placeholder="请输入用户名"/> -->
+				<u-field v-model="username" type="text" label="用户名" placeholder="请输入用户名"></u-field>
 			</view>
 			<view class="password">
 				<!-- <view class="label">密码</view> -->
-				<input class="value" type="password" v-model="password" placeholder="请输入密码"/>
+				<!-- <input class="value" type="text" v-model="password" placeholder="请输入密码"/> -->
+				<u-field v-model="password" type="text" :password="true" label="密码" placeholder="请输入密码"></u-field>
+				
 			</view>
 		</view>
 		<u-button type="success" class="submit" :ripple="true" size="default" @click="signIn()">登录</u-button>

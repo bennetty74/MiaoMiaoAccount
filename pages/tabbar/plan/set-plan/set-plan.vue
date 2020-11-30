@@ -1,8 +1,7 @@
 <template>
-	<view class="content">
+	<!-- <view class="content">
 		<view class="item">
-			<view class="label">预算</view>
-			<input class="plan" type="number" focus placeholder="0.00" v-model="plan.plan"/>
+			<u-field class="field-input" v-model="plan.plan" type="text" label="预算" placeholder="0.00" input-align="right"></u-field>
 		</view>
 		<view class="item">
 			<view class="label">时间</view>
@@ -20,8 +19,28 @@
 				<view class="date">{{endDate}}</view>
 			</picker>
 		</view>
-		<submit text="提交" @clickEvent="submit()"></submit>
+		<u-button class="submit" type="success"  @click="submit()">提交</u-button>
+	</view> -->
+	<view class="content">
+		<u-form class="form" :model="plan" ref="uForm">
+			<u-form-item label="预算"><u-input v-model="plan.plan" inputAlign="right"/></u-form-item>
+			<!-- <u-form-item label="日期"><u-picker mode="time" v-model="showDatePicker" :params="params" @confirm="" :defaultTime="plan.date" @click="showPicker"></u-picker></u-form-item> -->
+			<u-form-item label="日期">
+				<picker class="picker" mode="date" v-model="plan.date" fields="month" @change="bindDateChange">
+					<view class="date">{{plan.date}}</view>
+				</picker>
+			</u-form-item>
+			<u-form-item label="是否重复" label-width="auto"><u-switch v-model="isRepeat" slot="right" active-color="#03A174"></u-switch></u-form-item>
+			<u-form-item label="结束日期" label-width="auto" v-if="isRepeat">
+				<picker class="picker" mode="date" v-model="endDate" fields="month" @change="bindEndDateChange">
+					<view class="date">{{endDate}}</view>
+				</picker>
+			</u-form-item>
+		</u-form>
+		<u-button class="submit" type="success"  @click="submit()">提交</u-button>
 	</view>
+	
+	
 </template>
 
 <script>
@@ -35,8 +54,13 @@
 					plan:0.00,
 					date:moment().format("YYYY-MM"),
 				},
+				showDatePicker:false,
 				isRepeat:false,
-				endDate:moment().format("YYYY-MM")
+				endDate:moment().format("YYYY-MM"),
+				params:{
+					year: true,
+					month: true,
+				}
 			}
 		},
 		components:{
@@ -63,6 +87,9 @@
 			})
 		},
 		methods: {
+			bindEndDateChange(e){
+				this.endDate = e.target.value
+			},
 			bindDateChange(e){
 				this.date = e.target.value
 			},
@@ -85,6 +112,11 @@
 	align-items: center;
 	width: 100%;
 }
+
+.content .form{
+	width: 90%;
+}
+
 .content .item{
 	width: 100%;
 	display: flex;
@@ -93,26 +125,29 @@
 	padding: 10rpx 20rpx;
 }
 
-.content .item .label{
-	padding-left: 20rpx;
-	width: 22%;
-}
-.content .item .plan{
-	width: 78%;
-	text-align: right;
-	padding-right: 30rpx;
-}
-.content .item switch{
+
+.content .item  .switch{
 	transform:scale(0.7);
 	color: #03A174;
-	margin-left: 65%;
+	/* margin-left: 65%; */
+	text-align: right;
 }
 
-.content .item picker{
-	width: 78%;
-}
-.content .date{
+.content picker{
+	width: 100%;
 	text-align: right;
-	padding-right: 20rpx;
+}
+
+.submit{
+	background-color: #03A174;
+	width: 80%;
+	margin-top: 60rpx;
+}
+</style>
+
+<style>
+/* 样式没生效 */
+.uni-picker-container .uni-picker-action .uni-picker-action-confirm{
+	color: #03A174;
 }
 </style>

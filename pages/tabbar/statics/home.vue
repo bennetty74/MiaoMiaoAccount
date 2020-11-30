@@ -1,12 +1,16 @@
 <template>
-	<view class="content">
-		<view class="tab-container">
-			<view class="out" :class="getCurrClass(1)" @click="toTotalOut()">支出</view>
-			<view class="in" :class="getCurrClass(2)" @click="toTotalIn()">收入</view>
+	<view>
+		<view class="content">
+			<view class="tab-container">
+				<view class="out" :class="getCurrClass(1)" @click="toTotalOut()">支出</view>
+				<view class="in" :class="getCurrClass(2)" @click="toTotalIn()">收入</view>
+			</view>
+			<view class="total-container">
+				<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
+			</view>
 		</view>
-		<view class="total-container">
-			<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
-		</view>
+		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
+		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -15,6 +19,7 @@ import uCharts from '../../../js_sdk/u-charts/u-charts/u-charts.js';
 export default {
 	data() {
 		return {
+			tabbars:'',
 			currPage:1,
 			cWidth: '',
 			cHeight: '',
@@ -59,6 +64,38 @@ export default {
 		}
 	},
 	onLoad() {
+		this.tabbars = [{
+					"pagePath": "/pages/tabbar/index/home",
+					"iconPath": "/static/img/tabbar/home.png",
+					"selectedIconPath": "/static/img/tabbar/homeactive.png",
+					"text": "首页"
+				},
+				{
+					"pagePath": "/pages/tabbar/statics/home",
+					"iconPath": "/static/img/tabbar/statics.png",
+					"selectedIconPath": "/static/img/tabbar/staticsactive.png",
+					"text": "统计"
+				},
+				{
+					"pagePath": "/pages/tabbar/add/home",
+					"iconPath": "/static/img/tabbar/add.png",
+					"selectedIconPath": "/static/img/tabbar/addactive.png",
+					"midButton":true,
+					"text": "添加"
+				},
+				{
+					"pagePath": "/pages/tabbar/plan/home",
+					"iconPath": "/static/img/tabbar/plan.png",
+					"selectedIconPath": "/static/img/tabbar/planactive.png",
+					"text": "计划"
+				},
+				{
+					"pagePath": "/pages/tabbar/mine/home",
+					"iconPath": "/static/img/tabbar/me.png",
+					"selectedIconPath": "/static/img/tabbar/meactive.png",
+					"text": "我的"
+				}
+			]
 		this.cWidth = uni.upx2px(600);
 		this.cHeight = uni.upx2px(450);
 		this.getTotalOutData();

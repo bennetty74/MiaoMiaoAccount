@@ -6,20 +6,19 @@
 		</view>
 		<view class="body">
 			<view class="account">
-				<view class="label">用户名</view>
-				<input class="value" type="text" v-model="username" placeholder="请输入用户名"/>
+				<u-field v-model="username" type="text" label="用户名" required placeholder="请输入用户名"></u-field>
 			</view>
 			<view class="password">
-				<!-- <view class="label">密码</view> -->
-				<input class="value" type="password" v-model="password" placeholder="请输入密码"/>
+				<u-field v-model="password" type="text" :password="true" label="密码" required placeholder="请输入密码"></u-field>
 			</view>
 			<view class="password">
-				<!-- <view class="label">密码</view> -->
-				<input class="value" type="password" v-model="repeatPassword" placeholder="请确认输入密码"/>
+				<u-field v-model="repeatPassword" type="text" :password="true" label="重复密码" required placeholder="请输入再次输入密码"></u-field>
 			</view>
 		</view>
-		<submit text="注册" @clickEvent="signUp"></submit>
+		<u-button class="submit" type="success"  @click="signUp()">注册</u-button>
 		<view class="sign-in" @click="toSignIn">已有账户？点击登录</view>
+		
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -44,19 +43,31 @@
 			},
 			signUp(){
 				if(!this.username){
-					console.log("用户名不能为空")
+					this.$refs.uToast.show({
+						title: '用户名不能为空',
+						type: 'warning',
+					})
 					return
 				}
 				if(!this.password){
-					console.log("密码不能为空")
+					this.$refs.uToast.show({
+						title: '密码不能为空',
+						type: 'warning',
+					})
 					return
 				}
 				if(!this.repeatPassword){
-					console.log("请再次输入密码")
+					this.$refs.uToast.show({
+						title: '请再次输入密码',
+						type: 'warning',
+					})
 					return
 				}
 				if(this.password!=this.repeatPassword){
-					console.log("两次密码输入不一致，请重新输入")
+					this.$refs.uToast.show({
+						title: '密码输入不一致',
+						type: 'warning',
+					})
 					return
 				}
 				
@@ -70,18 +81,17 @@
 					},
 					success(res) {
 						console.log(res.result)
-						uni.showToast({
-							title:"注册成功",
-							duration:1000
+						that.$refs.uToast.show({
+							title: '注册成功',
+							type: 'success',
+							url:'/pages/sign-in/sign-in'
 						})
-						if(res.result.code === 'success'){
-							uni.redirectTo({
-								url:'../sign-in/sign-in'
-							})
-						}
 					},
 					fail(res) {
-						console.log(res.result.msg)
+						that.$refs.uToast.show({
+							title: res.result,
+							type: 'error',
+						})
 					}
 				})
 			}
@@ -142,6 +152,12 @@
 	margin-top: 20rpx;
 	font-size: 24rpx;
 	color: #03A174;
+}
+
+.submit{
+	margin-top: 40rpx;
+	width: 80%;
+	background-color: #03A174;
 }
 
 </style>

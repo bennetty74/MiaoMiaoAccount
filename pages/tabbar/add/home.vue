@@ -1,45 +1,46 @@
 <template>
-	<view class="content">
-		<view class="category">
-			<view class="item" v-for="(item,index) in categories" @click="onCategoryChange(index)">
-				<view class="iconfont" :class="[{active:index==categoryCursor},item.class]" @click="onCategoryChange(index)"></view>
-				<view class="name" :class="{active:categoryCursor==index}">{{item.name}}</view>
+	<view>
+		<view class="content">
+			<view class="category">
+				<view class="item" v-for="(item,index) in categories" @click="onCategoryChange(index)">
+					<view class="iconfont" :class="[{active:index==categoryCursor},item.class]" @click="onCategoryChange(index)"></view>
+					<view class="name" :class="{active:categoryCursor==index}">{{item.name}}</view>
+				</view>
 			</view>
-		</view>
 
-		<view class="account">
-			<view class="label">
-				账户
-			</view>
-			<view class="value">
-				<view class="text">
-					<picker @change="bindAccountChange" :value="accountIndex" :range="accounts" :range-key="'option'">
-						<view class="uni-input">{{accounts[accountIndex].name}}({{accounts[accountIndex].card_number}})</view>
-					</picker>
+			<view class="account">
+				<view class="label">
+					账户
+				</view>
+				<view class="value">
+					<view class="text">
+						<picker @change="bindAccountChange" :value="accountIndex" :range="accounts" :range-key="'option'">
+							<view class="uni-input">{{accounts[accountIndex].name}}({{accounts[accountIndex].card_number}})</view>
+						</picker>
+					</view>
 				</view>
 			</view>
-		</view>
 
-		<view class="note">
-			<view class="input-container">
-				<view class="label">备注</view>
-				<input class="input" type="text" v-model="note"/>
-			</view>
-			<view class="prompt">
-				<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
-			</view>
-		</view>
-		<view class="keybord">
-			<view class="keybord-top">
-				<view class="left">
-					<view class="iconfont icon-jine" style="color: #03A174;font-size: 40rpx;"></view>
-					<text class="text">金额：</text>
+			<view class="note">
+				<view class="input-container">
+					<view class="label">备注</view>
+					<input class="input" type="text" v-model="note"/>
 				</view>
-				<view class="amount">
-					{{amount}}
+				<view class="prompt">
+					<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
 				</view>
 			</view>
-			<view class="keybord-content">
+			<view class="keybord">
+				<view class="keybord-top">
+					<view class="left">
+						<view class="iconfont icon-jine" style="color: #03A174;font-size: 40rpx;"></view>
+						<text class="text">金额：</text>
+					</view>
+					<view class="amount">
+						{{amount}}
+					</view>
+				</view>
+				<view class="keybord-content">
 				<view class="row">
 					<view class="item number" data-num="7" @click="getValue($event)">7</view>
 					<view class="item number" data-num="8" @click="getValue($event)">8</view>
@@ -70,7 +71,10 @@
 					<view class="item complete" @click="submit()">完成</view>
 				</view>
 			</view>
+			</view>
 		</view>
+		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
+		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -80,6 +84,7 @@
 	export default {
 		data() {
 			return {
+				tabbars:'',
 				username: '',
 				note: '', //输入的备注信息
 				amount: '0.00', //记账金额
@@ -91,8 +96,41 @@
 			};
 		},
 
-		mounted() {
+		onLoad() {
 			this.username = util.getItem("username")
+			this.tabbars = [{
+						"pagePath": "/pages/tabbar/index/home",
+						"iconPath": "/static/img/tabbar/home.png",
+						"selectedIconPath": "/static/img/tabbar/homeactive.png",
+						"text": "首页"
+					},
+					{
+						"pagePath": "/pages/tabbar/statics/home",
+						"iconPath": "/static/img/tabbar/statics.png",
+						"selectedIconPath": "/static/img/tabbar/staticsactive.png",
+						"text": "统计"
+					},
+					{
+						"pagePath": "/pages/tabbar/add/home",
+						"iconPath": "/static/img/tabbar/add.png",
+						"selectedIconPath": "/static/img/tabbar/addactive.png",
+						"midButton":true,
+						"text": "添加"
+					},
+					{
+						"pagePath": "/pages/tabbar/plan/home",
+						"iconPath": "/static/img/tabbar/plan.png",
+						"selectedIconPath": "/static/img/tabbar/planactive.png",
+						"text": "计划"
+					},
+					{
+						"pagePath": "/pages/tabbar/mine/home",
+						"iconPath": "/static/img/tabbar/me.png",
+						"selectedIconPath": "/static/img/tabbar/meactive.png",
+						"text": "我的"
+					}
+				]
+			
 			this.categories = [{
 					name: '购物',
 					class:"icon-gouwu"
