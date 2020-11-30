@@ -12,6 +12,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "uview-ui/index.scss";
 @import url("@/static/css/iconfont.css");
 </style>

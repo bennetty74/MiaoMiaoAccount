@@ -14,13 +14,15 @@
 				<input class="value" type="password" v-model="password" placeholder="请输入密码"/>
 			</view>
 		</view>
-		<submit text="登录" @clickEvent="signIn"></submit>
+		<u-button type="success" class="submit" :ripple="true" size="default" @click="signIn()">登录</u-button>
 		<view class="sign-up" @click="toSignUp">还没有账户？点击注册</view>
+	
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
-import util  from '../../static/js/utils.js'
+import util  from '../../static/js/utils.js' 
 import submit from '../components/submit.vue'
 	export default {
 		data() {
@@ -45,11 +47,17 @@ import submit from '../components/submit.vue'
 			},
 			signIn(){
 				if(!this.username){
-					console.log("用户名不能为空")
+					this.$refs.uToast.show({
+						title: '用户名不能为空',
+						type: 'warning',
+					})
 					return
 				}
 				if(!this.password){
-					console.log("密码不能为空")
+					this.$refs.uToast.show({
+						title: '密码不能为空',
+						type: 'warning',
+					})
 					return
 				}
 				
@@ -62,24 +70,28 @@ import submit from '../components/submit.vue'
 					},
 					success(res) {
 						console.log(res.result)
-						uni.showToast({
-							title:"登录成功",
-							duration:5000
-						})
 						if(res.result.code === 'success'){
 							util.setItem("username",that.username)
-							setTimeout(function(){
-								uni.switchTab({
-									url:"../tabbar/index/home",
-									animationType: 'pop-in',
-									animationDuration: 200,
-								},2000)
+							console.log(that.$refs)
+							that.$refs.uToast.show({
+								title: '登录成功',
+								type: 'success',
+								isTab:true,
+								url:'/pages/tabbar/index/home'
 							})
-							
+						}else{
+							console.log(res,"消息")
+							that.$refs.uToast.show({
+								title: res.result.msg,
+								type: 'error',
+							})
 						}
 					},
 					fail(res) {
-						console.log(res.result.msg)
+						that.$refs.uToast.show({
+							title: res,
+							type: 'error',
+						})
 					}
 				})
 			}
@@ -87,7 +99,7 @@ import submit from '../components/submit.vue'
 	}
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content{
 	display: flex;
 	flex-direction: column;
@@ -96,8 +108,6 @@ import submit from '../components/submit.vue'
 	margin-top: 20%;
 }
 .header{
-	/* margin: 60rpx 0 0 40rpx; */
-	/* padding: 60rpx 0 0 40rpx; */
 	width: 80%;
 }
 .header .title{
@@ -140,6 +150,12 @@ import submit from '../components/submit.vue'
 	margin-top: 20rpx;
 	font-size: 24rpx;
 	color: #03A174;
+}
+
+.submit{
+	width: 80%;
+	margin-top: 40rpx;
+	background-color: #03A174;
 }
 
 </style>
