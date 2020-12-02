@@ -249,10 +249,11 @@ export default {
 	align-items: center;
 	width: 100%;
 	padding: 100upx 0 0 0;
-	/* background-image: url(@/static/img/index/header_bg.jpg); */
-	background-color: #03a174;
+	/* background-color: #03a174; */
+	background: linear-gradient(135deg, #9796f0, #fbc7d4);;
 	height: 320upx;
 	color: #FFFFFF;
+	border-radius: 0 0 100rpx 100rpx;
 }
 
 .date-container{

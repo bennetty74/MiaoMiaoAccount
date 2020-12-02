@@ -1,11 +1,11 @@
 <template>
 	<view>
-		<view class="content">
+		<view class="content u-skeleton">
 			<view class="header" @click="toUserInfoEdit">
 				<view class="avatar">
-					<image class="img" :src="userInfo.avatar" mode=""></image>
+					<image class="img u-skeleton-circle" :src="userInfo.avatar" mode=""></image>
 				</view>
-				<view class="info">
+				<view class="info u-skeleton-rect">
 					<view class="nickname">{{userInfo.nickname}}</view>
 					<view class="desc">{{userInfo.desc}}</view>
 				</view>
@@ -14,11 +14,11 @@
 				</view>
 			</view>
 			<view class="assets">
-				<view class="net">
+				<view class="net u-skeleton-rect">
 					<view class="label">净资产(元)：</view>
 					<view class="value">{{total_net_assets}}</view>
 				</view>
-				<view class="details-container">
+				<view class="details-container u-skeleton-rect">
 					<view class="item-container">
 						<view class="label">负债：</view>
 						<view class="debt">-{{total_debt}}</view>
@@ -56,14 +56,13 @@
 				</view>
 				<view class="line"></view><!-- item间分割线 -->
 			</view>
-
 			
 			<u-button type="success" class="submit" :ripple="true" size="default" @click="logout()">退出登录</u-button>
-			
-
 		</view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
 		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
+		<!--引用骨架组件-->
+		<u-skeleton :loading="loading" :animation="true"></u-skeleton>
 	</view>
 </template>
 
@@ -73,6 +72,7 @@
 	export default {
 		data() {
 			return {
+				loading:true,
 				tabbars: '',
 				total_net_assets: '0.00', //净资产
 				total_debt: '0.00', //总负债
@@ -170,6 +170,7 @@
 					success(res) {
 						console.log(res.result, "获取user info")
 						that.userInfo = res.result.data[0]
+						that.loading = false
 					},
 					fail(res) {
 						console.log('fail', res)
