@@ -46,13 +46,12 @@
 				<input class="value" type="text" v-model="note" placeholder="如工资卡/消费卡等"/>
 			</view>
 		</view>
-		<submit text="添加" @clickEvent="submit()"></submit>
+		<u-button type="success" class="submit" :ripple="true" size="default" @click="submit()">添加</u-button>
 	</view>
 </template>
 
 <script>
 import util from '@/static/js/utils.js'
-	import submit from '../../../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -93,7 +92,6 @@ import util from '@/static/js/utils.js'
 			}
 		},
 		components:{
-			submit
 		},
 		onShow() {
 			

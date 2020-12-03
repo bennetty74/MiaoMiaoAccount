@@ -68,7 +68,6 @@
 
 <script>
 	import util from '@/static/js/utils.js'
-	import submit from '../../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -118,8 +117,15 @@
 			this.getUserInfo()
 			this.getUserAccountsAndAeests()
 		},
+		onShow() {
+			let username = util.getItem("username")
+			if(!username){
+				uni.redirectTo({
+					url:"../../sign-in/sign-in"
+				})
+			}
+		},
 		components: {
-			submit
 		},
 		methods: {
 			toAboutUs() {

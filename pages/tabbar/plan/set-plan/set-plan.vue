@@ -1,26 +1,4 @@
 <template>
-	<!-- <view class="content">
-		<view class="item">
-			<u-field class="field-input" v-model="plan.plan" type="text" label="预算" placeholder="0.00" input-align="right"></u-field>
-		</view>
-		<view class="item">
-			<view class="label">时间</view>
-			<picker mode="date" v-model="plan.date" fields="month" @change="bindDateChange">
-				<view class="date">{{plan.date}}</view>
-			</picker>
-		</view>
-		<view class="item">
-			<view class="label">按月重复</view>
-			<switch color="#03A174" :checked="isRepeat" @change="repeatChange()" />
-		</view>
-		<view class="item" v-if="isRepeat">
-			<view class="label">结束时间</view>
-			<picker mode="date" v-model="end" fields="month" @change="bindDateChange">
-				<view class="date">{{endDate}}</view>
-			</picker>
-		</view>
-		<u-button class="submit" type="success"  @click="submit()">提交</u-button>
-	</view> -->
 	<view class="content">
 		<u-form class="form" :model="plan" ref="uForm">
 			<u-form-item label="预算"><u-input v-model="plan.plan" inputAlign="right"/></u-form-item>
@@ -44,7 +22,6 @@
 </template>
 
 <script>
-	import submit from '../../../components/submit.vue'
 	import util  from '@/static/js/utils.js'
 	import moment from 'moment'
 	export default {
@@ -64,7 +41,6 @@
 			}
 		},
 		components:{
-			submit
 		},
 		onLoad() {
 			this.username = util.getItem("username")

@@ -26,7 +26,6 @@
 
 <script>
 import util  from '../../static/js/utils.js' 
-import submit from '../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -34,9 +33,7 @@ import submit from '../components/submit.vue'
 				password:''
 			}
 		},
-		components:{
-			submit
-		},
+		
 		mounted() {
 			
 		},

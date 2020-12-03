@@ -1,8 +1,9 @@
 <template>
 	<view>
+		<navbar></navbar>
 		<view class="content">
 			<view class="category">
-				<view class="item" v-for="(item,index) in categories" @click="onCategoryChange(index)">
+				<view class="item" v-for="(item,index) in categories" @click="onCategoryChange(index)" :key="index">
 					<view class="iconfont" :class="[{active:index==categoryCursor},item.class]" @click="onCategoryChange(index)"></view>
 					<view class="name" :class="{active:categoryCursor==index}">{{item.name}}</view>
 				</view>
@@ -27,7 +28,7 @@
 					<input class="input" type="text" v-model="note"/>
 				</view>
 				<view class="prompt">
-					<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)">{{item}}</view>
+					<view class="item" v-for="(item,index) in notes" @click="getNote(item,index)" :class="getActiveStatus(item,index)" :key="index">{{item}}</view>
 				</view>
 			</view>
 			<view class="keybord">
@@ -81,6 +82,7 @@
 <script>
 	import moment from "moment"
 	import util from '@/static/js/utils.js'
+	import navbar from '../../components/navbar.vue'
 	export default {
 		data() {
 			return {
@@ -94,6 +96,9 @@
 				categories: [], //记账分类列表
 				notes: ['早餐', '晚餐', '化妆品'] //备注可选列表，需要发送交易到后台查询
 			};
+		},
+		components:{
+			navbar
 		},
 
 		onLoad() {

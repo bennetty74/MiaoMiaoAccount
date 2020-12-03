@@ -1,10 +1,12 @@
 <template>
 	<view>
-		<view class="content">
-			<view class="tab-container">
+		<u-navbar :is-back="false" title="">
+			<view class="slot-wrap">
 				<view class="out" :class="getCurrClass(1)" @click="toTotalOut()">支出</view>
 				<view class="in" :class="getCurrClass(2)" @click="toTotalIn()">收入</view>
 			</view>
+		</u-navbar>
+		<view class="content">
 			<view class="total-container">
 				<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
 			</view>
@@ -176,36 +178,37 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.slot-wrap{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
 .content{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-.tab-container{
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-
 /* 该样式必须在selected前面,以便于selected样式覆盖 */
-.tab-container .in,.tab-container .out{
+.slot-wrap .in,.slot-wrap .out{
 	color: #03A174;
 }
 
-.tab-container .out-selected,.tab-container .in-selected{
+.slot-wrap .out-selected,.slot-wrap .in-selected{
 	color: #FFFFFF;
 	background-color: #03A174;
 }
 
-.tab-container .out,.tab-container .in{
+.slot-wrap .out,.slot-wrap .in{
 	padding: 4upx 14upx;
 	border-radius: 10upx 0 0 10upx;
 	border: #03A174 1upx solid;
 }
 
-.tab-container .in{
+.slot-wrap .in{
 	border-radius: 0 10upx 10upx 0;
 }
 

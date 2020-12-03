@@ -253,7 +253,6 @@ export default {
 	background: linear-gradient(135deg, #9796f0, #fbc7d4);;
 	height: 320upx;
 	color: #FFFFFF;
-	border-radius: 0 0 100rpx 100rpx;
 }
 
 .date-container{

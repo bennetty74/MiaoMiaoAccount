@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="content">
+		<view class="content u-skeleton">
 			<view class="header-container">
 				<view class="top">
 					<view class="left">11月总预算</view>
@@ -8,18 +8,18 @@
 				</view>
 				<view class="bottom">
 					<view class="left">
-						<canvas canvas-id="canvasCircle" id="canvasCircle" class="canvas-circle"></canvas>
+						<canvas canvas-id="canvasCircle" id="canvasCircle" class="canvas-circle u-skeleton-circle"></canvas>
 					</view>
 					<view class="right">
-						<view class="item">
+						<view class="item u-skeleton-rect">
 							<view class="label">本月预算</view>
 							<view class="value">{{plan.plan}}</view>
 						</view>
-						<view class="item-mini">
+						<view class="item-mini u-skeleton-rect">
 							<view class="label">剩余预算</view>
 							<view class="value">{{plan.remain}}</view>
 						</view>
-						<view class="item-mini">
+						<view class="item-mini u-skeleton-rect">
 							<view class="label">本月支出</view>
 							<view class="value">{{plan.cost}}</view>
 						</view>
@@ -30,7 +30,7 @@
 				<view class="title">本月消费Top5</view>
 				<view class="detail">
 					<view v-for="(item,i) in bills" :key="i">
-						<view class="item" @click="toBillDetail(index,i)" @touchmove="touchEvent">
+						<view class="item u-skeleton-rect" @click="toBillDetail(index,i)" @touchmove="touchEvent">
 							<view  class="icon iconfont icon-jine selected"></view>
 							<view class="middle">
 								<view class="item-name">{{item.category}}</view>
@@ -52,6 +52,8 @@
 		</view>
 		<!-- 与包裹页面所有内容的元素u-page同级，且在它的下方 -->
 		<u-tabbar :list="tabbars" active-color="#03a174" inactive-color="#666666" :mid-button="true"></u-tabbar>
+		<!--引用骨架组件-->
+		<u-skeleton :loading="loading" :animation="true"></u-skeleton>
 	</view>
 </template>
 
@@ -64,6 +66,7 @@ var canvasCircle;
 export default {
 	data() {
 		return {
+			loading:true,
 			tabbars:'',
 			cWidth3:'',//圆弧进度图
 			cHeight3:'',//圆弧进度图
@@ -175,6 +178,7 @@ export default {
 					_self.chartData.series[0].data = that.plan.cost/that.plan.plan
 					console.log(_self.chartData)
 					_self.showArcbar("canvasCircle",_self.chartData);
+					that.loading = false
 				},
 				fail(res) {
 					console.log('fail')
@@ -347,6 +351,7 @@ export default {
 	margin: 20rpx 0 0 20rpx;
 	font-weight: bold;
 	font-size: 32rpx;
+	width: 95%;
 }
 
 .detail{

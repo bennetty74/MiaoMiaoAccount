@@ -23,7 +23,6 @@
 </template>
 
 <script>
-	import submit from '../components/submit.vue'
 	export default {
 		data() {
 			return {
@@ -33,7 +32,6 @@
 			}
 		},
 		components:{
-			submit
 		},
 		methods: {
 			toSignIn(){

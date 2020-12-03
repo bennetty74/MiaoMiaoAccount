@@ -15,16 +15,21 @@
 		},
 		{
 			"path": "pages/tabbar/statics/home",
-			"style": {}
+			"style": {
+				"app-plus": {
+				        "titleNView": false //禁用原生导航栏
+				}
+			}
 		},
 		{
 			"path": "pages/tabbar/add/home",
 			"style": {
 				"app-plus": {  
-					"titleNView": {
-						"titleAlign":"center",
-						"titleText": "记账"
-					}  
+					// "titleNView": {
+					// 	"titleAlign":"center",
+					// 	"titleText": "记账"
+					// }  
+					"titleNView": false //禁用原生导航栏
 				}  
 			}
 		},
